@@ -80,9 +80,7 @@ def plot_cases(
         days=diff_data_sim + num_days_data
     )
     num_days_future = (end_date_plot - date_data_end).days
-    print("num_days_future ",num_days_future)
-    print("end_date_plot ",end_date_plot)
-    print(date_data_end)
+
     start_date_mpl, end_date_mpl = matplotlib.dates.date2num(
         [start_date_plot, end_date_plot]
     )
@@ -116,28 +114,41 @@ def plot_cases(
         fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1],  fill='tonextx', line=dict(width=0.5, color='#ffe5ce'), fillcolor = '#ffe5ce',
                         mode= 'lines', opacity=0.2, showlegend=False))
         fig.add_trace(
-            go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', name='Fit with 95% CI') 
+            go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot"), name='Fit with 95% CI') 
         )
     
     time2 = np.arange(0, num_days_future)
-    print(num_days_future)
     mpl_dates_fut = conv_time_to_mpl_dates(time2) + diff_data_sim + num_days_data
     cases_future = new_cases_sim[:, num_days_data : num_days_data + num_days_future].T
     median = np.median(cases_future, axis=-1)
 
     ## 75% CI
     percentiles = (
-        np.percentile(cases_future, q=12.5, axis=-1),
-        np.percentile(cases_future, q=87.5, axis=-1),
+        np.percentile(cases_future, q=2.5, axis=-1),
+        np.percentile(cases_future, q=97.5, axis=-1),
     )
 
     mpl_dates_fut = matplotlib.dates.num2date(mpl_dates_fut)
-    print(median)
-    print(mpl_dates_fut)
-    if(second_graph == False):
-        
 
+    if(second_graph == False):
         # 75% CI
+        fig.add_trace(
+            go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffe5ce'), fillcolor='#ffe5ce',
+                        mode= 'lines',name="75%-top", opacity=0.2, showlegend=False)
+        )
+        fig.add_trace(
+            go.Scatter(x=mpl_dates_fut, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#ffe5ce'), fillcolor = '#ffe5ce',
+                        mode= 'lines',name="75%-bottom", opacity=0.2, showlegend=False)
+                        )
+
+
+        # 95% CI
+        percentiles = (
+            np.percentile(cases_future, q=12.5, axis=-1),
+            np.percentile(cases_future, q=87.5, axis=-1),
+        )
+
+        
         fig.add_trace(
             go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffdaba'), fillcolor='#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False)
@@ -146,45 +157,101 @@ def plot_cases(
             go.Scatter(x=mpl_dates_fut, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#ffdaba'), fillcolor = '#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False)
                         )
-        percentiles = (
-            np.percentile(cases_future, q=2.5, axis=0),
-            np.percentile(cases_future, q=97.5, axis=0),
-        
-        # 95% CI
-        )
-        fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffe5ce'), fillcolor='#ffe5ce',
-                        mode= 'lines', opacity=0.2, showlegend=False)
-        )
-        fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#ffe5ce'), fillcolor = '#ffe5ce',
-                        mode= 'lines', opacity=0.2, showlegend=False)
-                        )
         fig.add_trace(
             go.Scatter(x=mpl_dates_fut, y=median, mode='lines', name='Forecast with 75% and 95% CI') 
         )
 
+        #Add markers for 'school shutdown', 'airport shutdown', 'ramadan and mask'
+        fig.add_annotation(
+            x=mpl_dates_fut[2],
+            y=median[5],
+            text="School shutdown")
+        # fig.add_annotation(
+        #             x=4,
+        #             y=4,
+        #             text="Airport shutdown")
+        # fig.add_annotation(
+        #             x=4,
+        #             y=4,
+        #             text="Ramadan and mask")
+        fig.update_annotations(dict(
+                    xref="x",
+                    yref="y",
+                    showarrow=True,
+                    arrowhead=7,
+                    ax=0,
+                    ay=-40
+        ))
+
         fig.update_layout(
         xaxis_title="Date",
         yaxis_title="New confirmed cases in Qatar",
+        autosize=True,
+        height=550,
         font=dict(
             #family="Courier New, monospace",
-            size=14,
-            color="#7f7f7f"
+            size=12,
+            color="#7f7f7f",
+            ),
+        legend=dict(
+            x=0,
+            y=1,
+            traceorder="normal",
+                font=dict(
+                    family="sans-serif",
+                    size=12,
+                    color="black"
+                ),
             )
         )
+        fig.update_yaxes(automargin=True)
 
     
     if(second_graph == True):
+        filename = 'data/trace_lambda.pkl'
+        infile = open(filename,'rb')
+        trace_lambda_t = pickle.load(infile)
+        infile.close()
+        filename = 'data/trace_mu.pkl'
+        infile = open(filename,'rb')
+        trace_mu = pickle.load(infile)
+        infile.close()
+        
         time = np.arange(-diff_to_0, -diff_to_0 + len_sim)
-        lambda_t = trace["lambda_t"][:, :]
-        μ = trace["mu"][:, None]
+        lambda_t = trace_lambda_t[:, :]
+        μ = trace_mu[:, None]
         mpl_dates = conv_time_to_mpl_dates(time) + diff_data_sim + num_days_data
 
         # ax.plot(mpl_dates, np.median(lambda_t - μ, axis=0), color=colors[1], linewidth=2)
+        mpl_dates = matplotlib.dates.num2date(mpl_dates)
+
         fig.add_trace(
-            go.Scatter(x=mpl_dates, y=np.median(lambda_t - μ, axis=0), mode='lines', name='effective\ngrowth rate $\lambda_t^*$')
+            go.Scatter(x=mpl_dates, y=np.percentile(lambda_t - μ, q=2.5, axis=0), fill='none', line=dict(width=0.5, color='#ffdaba'), fillcolor='#ffdaba',
+                        mode= 'lines', opacity=0.2, showlegend=False)
         )
+        fig.add_trace(
+            go.Scatter(x=mpl_dates, y=np.percentile(lambda_t - μ, q=97.5, axis=0), fill='tonextx', line=dict(width=0.5, color='#ffdaba'), fillcolor = '#ffdaba',
+                        mode= 'lines', opacity=0.2, showlegend=False)
+                        )
+        fig.add_trace(
+            go.Scatter(x=mpl_dates, y=np.median(lambda_t - μ, axis=0), mode='lines', name='effective\ngrowth rate $H\\alpha$')# $\lambda_t^*$')
+        )
+
+        fig.add_shape(
+        # Line Vertical
+        dict(
+            type="line",
+            yref= 'paper', 
+            y0= 0, y1= 1,
+            xref= 'x', 
+            #CHANGE X0 AND X1 ONLY
+            x0= mpl_dates[5], x1= mpl_dates[5],
+            line=dict(
+                color="red",
+                width=2
+            )
+        ))
+
 
     #True new_cases_observed Data trace
     if(second_graph == False):
@@ -240,19 +307,19 @@ fig = plot_cases(
 )
 
 
-# fig_growth_rate = plot_cases(
-#     trace,
-#     new_cases_obs,
-#     date_begin_sim=sim_bd,
-#     diff_data_sim=16,
-#     start_date_plot=None,
-#     end_date_plot=None,
-#     ylim=1000,
-#     week_interval=2,
-#     colors=("tab:blue", "tab:orange"),
-#     country="Qatar",
-#     second_graph=True
-# )
+fig_growth_rate = plot_cases(
+    trace,
+    new_cases_obs,
+    date_begin_sim=sim_bd,
+    diff_data_sim=16,
+    start_date_plot=None,
+    end_date_plot=None,
+    ylim=1000,
+    week_interval=2,
+    colors=("tab:blue", "tab:orange"),
+    country="Qatar",
+    second_graph=True
+)
 
 # 2 column layout. 1st column width = 4/12
 # https://dash-bootstrap-components.opensource.faculty.ai/l/components/layout
@@ -362,15 +429,7 @@ column3 = dbc.Col(
             html.Hr(),
         dcc.Graph(
             id='small_graph',
-            figure={
-                'data': [
-                    {'x': [1, 2, 3, 4, 5], 'y': [9, 6, 2, 1, 5], 'type': 'line', 'name': 'First'},
-                    {'x': [1, 2, 3, 4, 5], 'y': [8, 7, 2, 7, 3], 'type': 'line', 'name': 'Second'},
-                ],
-                'layout': {
-                    'title': 'Basic Forecast'
-                }
-            }
+            figure=fig_growth_rate
         )
     ],
     md=6,
@@ -379,20 +438,20 @@ column3 = dbc.Col(
 
 column4 = dbc.Col(
     [
-        html.H1("Covid19 Forecast - Qatar"),
-            html.Hr(),
-        dcc.Graph(
-            id='main_graph',
-            figure={
-                'data': [
-                    {'x': [1, 2, 3, 4, 5], 'y': [9, 6, 2, 1, 5], 'type': 'line', 'name': 'First'},
-                    {'x': [1, 2, 3, 4, 5], 'y': [8, 7, 2, 7, 3], 'type': 'line', 'name': 'Second'},
-                ],
-                'layout': {
-                    'title': 'Basic Forecast'
-                }
-            }
-        )
+        # html.H1("Covid19 Forecast - Qatar"),
+        #     html.Hr(),
+        # dcc.Graph(
+        #     id='main_graph',
+        #     figure={
+        #         'data': [
+        #             {'x': [1, 2, 3, 4, 5], 'y': [9, 6, 2, 1, 5], 'type': 'line', 'name': 'First'},
+        #             {'x': [1, 2, 3, 4, 5], 'y': [8, 7, 2, 7, 3], 'type': 'line', 'name': 'Second'},
+        #         ],
+        #         'layout': {
+        #             'title': 'Basic Forecast'
+        #         }
+        #     }
+        # )
     ],
     md=6,
     #width=4,
