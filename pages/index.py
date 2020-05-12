@@ -252,6 +252,37 @@ def plot_cases(
             )
         ))
 
+        
+        fig.update_layout(
+            annotations=[
+                dict(
+                    x=10.7,
+                    y=0.5,
+                    showarrow=False,
+                    text="Custom y-axis title",
+                    textangle=0,
+                    xref="paper",
+                    yref="paper"
+                )
+            ],
+            autosize=True,
+            # margin=dict(
+            #     b=100
+            # ),
+            # xaxis=dict(
+            #     autorange=False,
+            #     range=[-0.05674507980728292, -0.0527310420933204],
+            #     type="linear"
+            # ),
+            # yaxis=dict(
+            #     autorange=False,
+            #     range=[1.2876210047544652, 1.2977732997811402],
+            #     type="linear"
+            # ),
+            # height=550,
+            # width=1137
+        )
+
 
     #True new_cases_observed Data trace
     if(second_graph == False):
@@ -417,7 +448,7 @@ column2 = dbc.Col(
         
         dbc.Row([
             html.H4("Last updated on 12/05/2020", style={'text-align': 'center'}),
-            ], justify='center', className="h-20",style={"padding":"2.5rem",'text-align': 'center'},
+            ], justify='end', className="h-20",style={"padding":"2.5rem",'text-align': 'center'},
             ),
     ],
     md=8,
@@ -425,8 +456,9 @@ column2 = dbc.Col(
 
 column3 = dbc.Col(
     [
-        html.H1("Covid19 Forecast - Qatar"),
-            html.Hr(),
+        
+        html.Hr(),
+        html.H3("Effective Growth Rate - Qatar"),
         dcc.Graph(
             id='small_graph',
             figure=fig_growth_rate
@@ -439,7 +471,8 @@ column3 = dbc.Col(
 column4 = dbc.Col(
     [
         # html.H1("Covid19 Forecast - Qatar"),
-        #     html.Hr(),
+             html.Hr(),
+            html.H3(" "),
         # dcc.Graph(
         #     id='main_graph',
         #     figure={
@@ -459,6 +492,8 @@ column4 = dbc.Col(
 )
 
 layout = dbc.Container([
+            html.H1("Covid19 Forecast - Qatar"),
+            html.Hr(),
             dbc.Row([column1, column2],justify="center",),
             dbc.Row([column3, column4],justify="center",)
             ],fluid=True,)
