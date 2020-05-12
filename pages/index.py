@@ -448,6 +448,11 @@ column2 = dbc.Col(
                             className="row container-display",
                         ),
         dcc.Graph(figure=fig),
+        
+        dbc.Row([
+            html.H4("Last updated on 12/05/2020", style={'text-align': 'center'}),
+            ], justify='center', className="h-20",style={"padding":"2.5rem",'text-align': 'center'},
+            ),
     ],
     md=8,
 )
