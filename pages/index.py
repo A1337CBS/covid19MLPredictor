@@ -1,4 +1,5 @@
 # Imports from 3rd party libraries
+import pdb
 import dash
 import pandas as pd
 import numpy as np
@@ -17,6 +18,7 @@ import matplotlib
 import pickle
 import datetime
 
+from covid19_inference.data_retrieval import *
 import dash_table
 
 # Imports from this application
@@ -59,14 +61,12 @@ def plot_cases(
         -------
         figure, axes
     """
-
     def conv_time_to_mpl_dates(arr):
         return matplotlib.dates.date2num(
             [datetime.timedelta(days=float(date)) + date_begin_sim for date in arr]
-        )
-
+    )
     new_cases_sim = trace
-    len_sim = trace.shape[1] + 16
+    len_sim = trace.shape[1] + diff_data_sim
     if start_date_plot is None:
         start_date_plot = date_begin_sim + datetime.timedelta(days=diff_data_sim)
     if end_date_plot is None:
@@ -94,141 +94,71 @@ def plot_cases(
         week_inter_left = week_interval
         week_inter_right = week_interval
 
-    # fig, axes = plt.subplots(
-    #     1,
-    #     1,
-    #     #figsize=(36, 20)
-    #   #  gridspec_kw={"height_ratios": [1, 3], "width_ratios": [2, 3]},
-    # )
     fig = make_subplots(rows=1, cols=1)
     
-    # ax = axes
-    time_arr = np.arange(-len(new_cases_obs), 0)
-    mpl_dates = conv_time_to_mpl_dates(time_arr) + diff_data_sim + num_days_data
-    # ax.plot(
-    #     mpl_dates,
-    #     new_cases_obs,
-    #     "d",
-    #     markersize=6,
-    #     label="Data",
-    #     zorder=5,
-    #     color=colors[0],
-    # )
-    new_cases_past = new_cases_sim[:, :num_days_data]
-    percentiles = (
-        np.percentile(new_cases_past, q=2.5, axis=0),
-        np.percentile(new_cases_past, q=97.5, axis=0),
-    )
-    # ax.plot(
-    #     mpl_dates,
-    #     np.median(new_cases_past, axis=0),
-    #     color=colors[1],
-    #     label="Fit (with 95% CI)",
-    # )
-    # ax.fill_between(
-    #     mpl_dates, percentiles[0], percentiles[1], alpha=0.3, color=colors[1]
-    # )
-    # ax.set_yscale("log")
-    # ax.set_ylabel("Number of new cases")
-    # ax.set_xlabel("Date")
-    # ax.legend()
-    # ax.xaxis.set_major_locator(
-    #     matplotlib.dates.WeekdayLocator(
-    #         interval=week_inter_left, byweekday=matplotlib.dates.SU
-    #     )
-    # )
-    # ax.xaxis.set_minor_locator(matplotlib.dates.DayLocator())
-    # ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%m/%d"))
-    # ax.set_xlim(start_date_mpl)
-
-    # ax = axes[1][1]
 
     time1 = np.arange(-len(new_cases_obs), 0)
     mpl_dates = conv_time_to_mpl_dates(time1) + diff_data_sim + num_days_data
     mpl_dates = matplotlib.dates.num2date(mpl_dates)
-    #mpl_dates = pd.to_datetime(mpl_dates,format='%Y%m%d', errors='ignore')
-   # mpl_dates = [datetime.datetime.strptime(x, '%Y-%m-%d').date() for x in mpl_dates]
-    
-    # ax.plot(
-    #     mpl_dates,
-    #     new_cases_obs,
-    #     "d",
-    #     label="Data",
-    #     markersize=4,
-    #     color=colors[0],
-    #     zorder=5,
-    # )
-
-    # #Data trace - Move it at end to overlay over CI
-    # fig.add_trace(
-    # go.Scatter(x=mpl_dates, y=new_cases_obs, mode='markers', name='Data')
-    # )
 
     new_cases_past = new_cases_sim[:, :num_days_data]
-    # ax.plot(
-    #     mpl_dates,
-    #     np.median(new_cases_past, axis=0),
-    #     "--",
-    #     color=colors[1],
-    #     linewidth=1.5,
-    #     label="Fit with 95% CI",
-    # )
 
-    percentiles = (
-        np.percentile(new_cases_past, q=2.5, axis=0),
-        np.percentile(new_cases_past, q=97.5, axis=0),
-    )
-    # ax.fill_between(
-    #     mpl_dates, percentiles[0], percentiles[1], alpha=0.2, color=colors[1]
-    # )
+    
+    # 95% CI
     if(second_graph == False):
+        percentiles = (
+            np.percentile(new_cases_past, q=2.5, axis=0),
+            np.percentile(new_cases_past, q=97.5, axis=0),
+        )
+        fig.add_trace(
+            go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', name='forecast with 75% and 95% CI') 
+        )
         fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0],  fill='none', line=dict(width=0.5, color='#ffe5ce'), fillcolor='#ffe5ce',
                         mode= 'lines', opacity=0.2, showlegend=False))
         fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1],  fill='tonextx', line=dict(width=0.5, color='#ffe5ce'), fillcolor = '#ffe5ce',
                         mode= 'lines', opacity=0.2, showlegend=False))
 
-    percentiles = (
-        np.percentile(new_cases_past, q=12.5, axis=0),
-        np.percentile(new_cases_past, q=87.5, axis=0),
-    )
-    # ax.fill_between(
-    #     mpl_dates, percentiles[0], percentiles[1], alpha=0.2, color=colors[1]
-    # )
-    if(second_graph == False):
-        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffdaba'), fillcolor='#ffdaba',
-                        mode= 'lines', opacity=0.2, showlegend=False))
-        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#ffdaba'), fillcolor = '#ffdaba',
-                        mode= 'lines', opacity=0.2, showlegend=False))
-        fig.add_trace(
-        go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', name='Fit with 95% CI', line={'color':'#00cc96'})
-        )
-
-
+    
     time2 = np.arange(0, num_days_future)
     print(num_days_future)
     mpl_dates_fut = conv_time_to_mpl_dates(time2) + diff_data_sim + num_days_data
     cases_future = new_cases_sim[:, num_days_data : num_days_data + num_days_future].T
     median = np.median(cases_future, axis=-1)
+
+    ## 75% CI
     percentiles = (
         np.percentile(cases_future, q=2.5, axis=-1),
         np.percentile(cases_future, q=97.5, axis=-1),
     )
-    # ax.plot(
-    #     mpl_dates_fut,
-    #     median,
-    #     color=colors[1],
-    #     linewidth=3,
-    #     label="forecast with 75% and 95% CI",
-    # )
-    #mpl_dates_fut = [datetime.strptime(x, '%Y-%m-%d').date() for x in mpl_dates_fut]
-    #mpl_dates_fut = pd.to_datetime(mpl_dates_fut,format='%Y%m%d', errors='ignore')
+
     mpl_dates_fut = matplotlib.dates.num2date(mpl_dates_fut)
     print(median)
     print(mpl_dates_fut)
-    if(second_graph == False):
+    if(second_graph == True):
         fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=median, mode='markers', name='forecast with 75% and 95% CI') 
+            go.Scatter(x=mpl_dates_fut, y=median, mode='lines', name='forecast with 75% and 95% CI') 
         )
+
+        fig.add_trace(
+            go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffdaba'), fillcolor='#ffdaba',
+                        mode= 'lines', opacity=0.2, showlegend=False)
+        )
+        fig.add_trace(
+            go.Scatter(x=mpl_dates_fut, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#ffdaba'), fillcolor = '#ffdaba',
+                        mode= 'lines', opacity=0.2, showlegend=False)
+                        )
+        percentiles = (
+            np.percentile(cases_future, q=2.5, axis=0),
+            np.percentile(cases_future, q=97.5, axis=0),
+        )
+        fig.add_trace(
+            go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffdaba'), fillcolor='#ffdaba',
+                        mode= 'lines', opacity=0.2, showlegend=False)
+        )
+        fig.add_trace(
+            go.Scatter(x=mpl_dates_fut, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#ffdaba'), fillcolor = '#ffdaba',
+                        mode= 'lines', opacity=0.2, showlegend=False)
+                        )
 
 
         fig.update_layout(
@@ -240,33 +170,7 @@ def plot_cases(
             color="#7f7f7f"
             )
         )
-    # ax.fill_between(
-    #     mpl_dates_fut, percentiles[0], percentiles[1], alpha=0.1, color=colors[1]
-    # )
-    # ax.fill_between(
-    #     mpl_dates_fut,
-    #     np.percentile(cases_future, q=12.5, axis=-1),
-    #     np.percentile(cases_future, q=87.5, axis=-1),
-    #     alpha=0.2,
-    #     color=colors[1],
-    # )
 
-    # ax.set_xlabel("Date")
-    # ax.set_ylabel(f"New confirmed cases in {country}")
-    # ax.legend(loc="upper left")
-    # ax.set_ylim(0, 3000)
-    func_format = lambda num, _: "${:.0f}\,$k".format(num / 1_000)
-    #ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(func_format))
-    # ax.set_xlim(start_date_mpl, end_date_mpl)
-    # ax.xaxis.set_major_locator(
-    #     matplotlib.dates.WeekdayLocator(
-    #         interval=week_inter_right, byweekday=matplotlib.dates.SU
-    #     )
-    # )
-    # ax.xaxis.set_minor_locator(matplotlib.dates.DayLocator())
-    # ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%m/%d"))
-
-    # # ax = axes[0][1]
     
     if(second_graph == True):
         time = np.arange(-diff_to_0, -diff_to_0 + len_sim)
@@ -278,51 +182,6 @@ def plot_cases(
         fig.add_trace(
             go.Scatter(x=mpl_dates, y=np.median(lambda_t - μ, axis=0), mode='lines', name='effective\ngrowth rate $\lambda_t^*$')
         )
-        # ax.fill_between(
-        #     mpl_dates,
-        #     np.percentile(lambda_t - μ, q=2.5, axis=0),
-        #     np.percentile(lambda_t - μ, q=97.5, axis=0),
-        #     alpha=0.15,
-        #     color=colors[1],
-        # )
-
-        # ax.set_ylabel("effective\ngrowth rate $\lambda_t^*$")
-
-        # ax.set_ylim(-0.15, 0.45)
-        # ylims = ax.get_ylim()
-        # ax.hlines(0, start_date_mpl, end_date_mpl, linestyles=":")
-        # delay = matplotlib.dates.date2num(date_data_end) - np.percentile(
-        #     trace["delay"], q=75
-        # )
-        # ax.vlines(delay, ylims[0], ylims[1], linestyles="-", colors=["tab:red"])
-        # ax.set_ylim(*ylims)
-        # ax.text(
-        #     delay + 0.5,
-        #     ylims[1] - 0.04 * np.diff(ylims),
-        #     "unconstrained because\nof reporting delay",
-        #     color="tab:red",
-        #     verticalalignment="top",
-        # )
-        # ax.text(
-        #     delay - 0.5,
-        #     ylims[1] - 0.04 * np.diff(ylims),
-        #     "constrained\nby data",
-        #     color="tab:red",
-        #     horizontalalignment="right",
-        #     verticalalignment="top",
-        # )
-        # ax.xaxis.set_major_locator(
-        #     matplotlib.dates.WeekdayLocator(
-        #         interval=week_inter_right, byweekday=matplotlib.dates.SU
-        #     )
-        # )
-        # ax.xaxis.set_minor_locator(matplotlib.dates.DayLocator())
-        # ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%m/%d"))
-        # ax.set_xlim(start_date_mpl, end_date_mpl)
-
-    # axes[0][0].set_visible(False)
-
-    # plt.subplots_adjust(wspace=0.4, hspace=0.3)
 
     #True new_cases_observed Data trace
     if(second_graph == False):
@@ -331,34 +190,29 @@ def plot_cases(
         )
 
     return fig
+jhu = JHU()
+#It is important to download the dataset!
+#One could also parse true to the constructor of the class to force an auto download
+jhu.download_all_available_data(); 
 
+date_begin_data = datetime.datetime(2020,3,3)
+df_confirmed_new = jhu.get_new_confirmed(country='Qatar', begin_date=date_begin_data).iloc[-1]
+df_totals = jhu.get_confirmed_deaths_recovered(country='Qatar', begin_date=date_begin_data).iloc[-1]
+#new_cases_obs = (df['confirmed'].values)
 
-#     fig.update_xaxes(type="log")
-# fig.update_yaxes(type="log")
-
-# mpl_fig = plt.figure()
-# ax= mpl_fig.add_subplot(111)
-# ax.plot(range(10), [i**2 for i in range(10)])
-# ax.grid(True)
-# fig = mpl_to_plotly(mpl_fig)
-filename = 'data/trace.pickle'
+filename = 'data/trace_new_cases.pkl'
 infile = open(filename,'rb')
 trace = pickle.load(infile)
 infile.close()
 
-df_online = pd.read_csv('data/owid-covid-data.csv')
-df_online = df_online[(df_online.location == "Qatar")]
-#df = df_online.loc[(df_online['date'] >= "2020-03-07") & (df['date'] <= '2020-05-9')]
+df4Table = pd.read_csv('data/model_output.csv')
 
-df = pd.read_csv('data/model_output.csv')
-#df = df[(df.location == "Qatar")]
-df = df.loc[(df['DT'] >= "2020-03-07") & (df['DT'] <= '2020-05-9')]
+df4Table = df4Table.loc[(df4Table['DT'] >= "2020-05-07")]
+df_obs = jhu.get_new_confirmed(country='Qatar', begin_date=date_begin_data)
+new_cases_obs = (df_obs['confirmed'].values)
 
-df4Table = df.loc[(df['DT'] >= "2020-05-07") & (df['DT'] <= '2020-05-9')]
 df4Table.replace(0, np.nan, inplace=True)
 df4Table.columns = ['Date', 'Observed', 'Model']
-new_cases_obs = (df['Observed_New_Cases'].values)
-date_begin_data = datetime.datetime(2020,3,7)
 diff_data_sim = 16 # should be significantly larger than the expected delay, in 
                    # order to always fit the same number of data points.
 # begin date of observations
@@ -444,7 +298,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4(df_online.iloc[-1]['new_cases'], id="newText", className='mr-2'),  
+                                        html.H4(df_confirmed_new.iloc[-1], id="newText", className='mr-2'),  
                                         html.P("New cases"),
                                         ])
                                     ],
@@ -455,8 +309,8 @@ column2 = dbc.Col(
                                     [   
                                         dbc.CardBody(
                                         [
-                                        html.H4(df_online.iloc[-1]['new_deaths'], id="recoveredText", className='mr-2'),  
-                                        html.P("New Deaths"),
+                                        html.H4(df_totals.iloc[2], id="recoveredText", className='mr-2'),  
+                                        html.P("Total Recovered"),
                                         ])
                                         
                                         ],
@@ -467,7 +321,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4(df_online.iloc[-1]["total_cases"], id="confirmedText", className='mr-2'),  
+                                        html.H4(df_totals.iloc[0], id="confirmedText", className='mr-2'),  
                                         html.P("Confirmed cases"),
                                         ])
                                     ],
@@ -478,7 +332,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4(df_online.iloc[-1]['total_deaths'], id="deathsText", className='mr-2'),  
+                                        html.H4(df_totals.iloc[1], id="deathsText", className='mr-2'),  
                                         html.P("Total Deaths"),
                                         ])
                                     ],
