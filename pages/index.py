@@ -9,12 +9,14 @@ from dash.dependencies import Input, Output
 import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
+import time
 
 from plotly.tools import mpl_to_plotly
 from matplotlib import pyplot as plt
 import matplotlib
 import pickle
 import datetime
+
 import dash_table
 
 # Imports from this application
@@ -139,6 +141,10 @@ def plot_cases(
 
     time1 = np.arange(-len(new_cases_obs), 0)
     mpl_dates = conv_time_to_mpl_dates(time1) + diff_data_sim + num_days_data
+    mpl_dates = matplotlib.dates.num2date(mpl_dates)
+    #mpl_dates = pd.to_datetime(mpl_dates,format='%Y%m%d', errors='ignore')
+   # mpl_dates = [datetime.datetime.strptime(x, '%Y-%m-%d').date() for x in mpl_dates]
+    
     # ax.plot(
     #     mpl_dates,
     #     new_cases_obs,
@@ -195,7 +201,9 @@ def plot_cases(
     #     linewidth=3,
     #     label="forecast with 75% and 95% CI",
     # )
-
+    #mpl_dates_fut = [datetime.strptime(x, '%Y-%m-%d').date() for x in mpl_dates_fut]
+    #mpl_dates_fut = pd.to_datetime(mpl_dates_fut,format='%Y%m%d', errors='ignore')
+    mpl_dates_fut = matplotlib.dates.num2date(mpl_dates_fut)
     fig.add_trace(
         go.Scatter(x=mpl_dates_fut, y=median, mode='lines', name='forecast with 75% and 95% CI') 
     )
