@@ -176,9 +176,9 @@ def plot_cases(
     #     mpl_dates, percentiles[0], percentiles[1], alpha=0.2, color=colors[1]
     # )
     fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0], fill='tonexty', fillcolor='#ffe5ce',
-                    mode= 'none', opacity=0.2, name=None))
+                    mode= 'none', opacity=0.2, showlegend=False))
     fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1], fill='tonexty', fillcolor = '#ffe5ce',
-                    mode= 'none', opacity=0.2))
+                    mode= 'none', opacity=0.2, showlegend=False))
 
     percentiles = (
         np.percentile(new_cases_past, q=12.5, axis=0),
@@ -188,9 +188,9 @@ def plot_cases(
     #     mpl_dates, percentiles[0], percentiles[1], alpha=0.2, color=colors[1]
     # )
     fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0], fill='tonexty', fillcolor='#FFCFD0',
-                    mode= 'none', opacity=0.2, name=None))
+                    mode= 'none', opacity=0.2, showlegend=False))
     fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1], fill='tonexty', fillcolor = '#FFCFD0',
-                    mode= 'none', opacity=0.2))
+                    mode= 'none', opacity=0.2, showlegend=False))
     fig.add_trace(
     go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines+markers', name='Fit with 95% CI',fillcolor="#ff800f")
     )
