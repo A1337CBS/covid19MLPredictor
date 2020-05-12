@@ -181,11 +181,11 @@ def plot_cases(
     # ax.fill_between(
     #     mpl_dates, percentiles[0], percentiles[1], alpha=0.2, color=colors[1]
     # )
-    #if(second_graph = False):
-    # fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0], fill='tonexty', fillcolor='#ffe5ce',
-    #                 mode= 'none', opacity=0.2, showlegend=False))
-    # fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1], fill='tonexty', fillcolor = '#ffe5ce',
-    #                 mode= 'none', opacity=0.2, showlegend=False))
+    if(second_graph == False):
+        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0],  fill='none', line=dict(width=0.5, color='#ffe5ce'), fillcolor='#ffe5ce',
+                        mode= 'lines', opacity=0.2, showlegend=False))
+        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1],  fill='tonextx', line=dict(width=0.5, color='#ffe5ce'), fillcolor = '#ffe5ce',
+                        mode= 'lines', opacity=0.2, showlegend=False))
 
     percentiles = (
         np.percentile(new_cases_past, q=12.5, axis=0),
@@ -195,12 +195,12 @@ def plot_cases(
     #     mpl_dates, percentiles[0], percentiles[1], alpha=0.2, color=colors[1]
     # )
     if(second_graph == False):
-        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0], fill='none', line=dict(width=0.5, color='#FFCFD0'), fillcolor='#FFCFD0',
+        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffdaba'), fillcolor='#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False))
-        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#FFCFD0'), fillcolor = '#FFCFD0',
+        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#ffdaba'), fillcolor = '#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False))
         fig.add_trace(
-        go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', name='Fit with 95% CI',fillcolor="#ff800f")
+        go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', name='Fit with 95% CI', line={'color':'#00cc96'})
         )
 
 
@@ -410,7 +410,13 @@ column1 = dbc.Jumbotron([
                         id='table',
                         columns=[{"name": i, "id": i} for i in df4Table.columns],
                         data=df4Table.to_dict('records'),
+                        style_cell={'textAlign': 'left'},
+                        style_header={
+                                #'backgroundColor': 'white',
+                                'fontWeight': 'bold'
+                            },
                         ),
+                        
                     ],
                     className="w-85 mb-3",
                     id="cross-filter-options",
