@@ -176,11 +176,21 @@ def plot_cases(
     #     mpl_dates, percentiles[0], percentiles[1], alpha=0.2, color=colors[1]
     # )
     fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0], fill='tonexty', fillcolor='#ffe5ce',
-                    mode= 'none', opacity=0.2))
+                    mode= 'none', opacity=0.2, name=None))
     fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1], fill='tonexty', fillcolor = '#ffe5ce',
                     mode= 'none', opacity=0.2))
 
-
+    percentiles = (
+        np.percentile(new_cases_past, q=12.5, axis=0),
+        np.percentile(new_cases_past, q=87.5, axis=0),
+    )
+    # ax.fill_between(
+    #     mpl_dates, percentiles[0], percentiles[1], alpha=0.2, color=colors[1]
+    # )
+    fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0], fill='tonexty', fillcolor='#FFCFD0',
+                    mode= 'none', opacity=0.2, name=None))
+    fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1], fill='tonexty', fillcolor = '#FFCFD0',
+                    mode= 'none', opacity=0.2))
     fig.add_trace(
     go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines+markers', name='Fit with 95% CI',fillcolor="#ff800f")
     )
@@ -312,12 +322,17 @@ infile = open(filename,'rb')
 trace = pickle.load(infile)
 infile.close()
 
+df_online = pd.read_csv('data/owid-covid-data.csv')
+df_online = df_online[(df_online.location == "Qatar")]
+#df = df_online.loc[(df_online['date'] >= "2020-03-07") & (df['date'] <= '2020-05-9')]
+
 df = pd.read_csv('data/model_output.csv')
 #df = df[(df.location == "Qatar")]
 df = df.loc[(df['DT'] >= "2020-03-07") & (df['DT'] <= '2020-05-9')]
 
 df4Table = df.loc[(df['DT'] >= "2020-05-07") & (df['DT'] <= '2020-05-9')]
-
+df4Table.replace(0, np.nan, inplace=True)
+df4Table.columns = ['Date', 'Observed', 'Model']
 new_cases_obs = (df['Observed_New_Cases'].values)
 date_begin_data = datetime.datetime(2020,3,7)
 diff_data_sim = 16 # should be significantly larger than the expected delay, in 
@@ -353,7 +368,7 @@ column1 = dbc.Jumbotron([
                 [
                 dbc.Card(
                 [
-                        html.H5("Forecast for last 10 days:", className="card-title"),
+                        html.H5("New Case Forecast", className="card-title"),
                         #html.P("1023"),
                         dash_table.DataTable(
                         id='table',
@@ -387,7 +402,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4('10234', id="newText", className='mr-2'),  
+                                        html.H4(df_online.iloc[-1]['new_cases'], id="newText", className='mr-2'),  
                                         html.P("New cases"),
                                         ])
                                     ],
@@ -398,8 +413,8 @@ column2 = dbc.Col(
                                     [   
                                         dbc.CardBody(
                                         [
-                                        html.H4('10234', id="recoveredText", className='mr-2'),  
-                                        html.P("Recovered cases"),
+                                        html.H4(df_online.iloc[-1]['new_deaths'], id="recoveredText", className='mr-2'),  
+                                        html.P("New Deaths"),
                                         ])
                                         
                                         ],
@@ -410,7 +425,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4('10234', id="confirmedText", className='mr-2'),  
+                                        html.H4(df_online.iloc[-1]["total_cases"], id="confirmedText", className='mr-2'),  
                                         html.P("Confirmed cases"),
                                         ])
                                     ],
@@ -421,8 +436,8 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4('10234', id="deathsText", className='mr-2'),  
-                                        html.P("Deaths"),
+                                        html.H4(df_online.iloc[-1]['total_deaths'], id="deathsText", className='mr-2'),  
+                                        html.P("Total Deaths"),
                                         ])
                                     ],
                                     id="deaths",
