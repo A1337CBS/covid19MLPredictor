@@ -110,14 +110,14 @@ def plot_cases(
             np.percentile(new_cases_past, q=2.5, axis=0),
             np.percentile(new_cases_past, q=97.5, axis=0),
         )
-        fig.add_trace(
-            go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', name='forecast with 75% and 95% CI') 
-        )
+        
         fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0],  fill='none', line=dict(width=0.5, color='#ffe5ce'), fillcolor='#ffe5ce',
                         mode= 'lines', opacity=0.2, showlegend=False))
         fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1],  fill='tonextx', line=dict(width=0.5, color='#ffe5ce'), fillcolor = '#ffe5ce',
                         mode= 'lines', opacity=0.2, showlegend=False))
-
+        fig.add_trace(
+            go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', name='forecast with and 95% CI') 
+        )
     
     time2 = np.arange(0, num_days_future)
     print(num_days_future)
@@ -127,18 +127,17 @@ def plot_cases(
 
     ## 75% CI
     percentiles = (
-        np.percentile(cases_future, q=2.5, axis=-1),
-        np.percentile(cases_future, q=97.5, axis=-1),
+        np.percentile(cases_future, q=12.5, axis=-1),
+        np.percentile(cases_future, q=87.5, axis=-1),
     )
 
     mpl_dates_fut = matplotlib.dates.num2date(mpl_dates_fut)
     print(median)
     print(mpl_dates_fut)
-    if(second_graph == True):
-        fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=median, mode='lines', name='forecast with 75% and 95% CI') 
-        )
+    if(second_graph == False):
+        
 
+        # 75% CI
         fig.add_trace(
             go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffdaba'), fillcolor='#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False)
@@ -150,16 +149,20 @@ def plot_cases(
         percentiles = (
             np.percentile(cases_future, q=2.5, axis=0),
             np.percentile(cases_future, q=97.5, axis=0),
+        
+        # 95% CI
         )
         fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffdaba'), fillcolor='#ffdaba',
+            go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffe5ce'), fillcolor='#ffe5ce',
                         mode= 'lines', opacity=0.2, showlegend=False)
         )
         fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#ffdaba'), fillcolor = '#ffdaba',
+            go.Scatter(x=mpl_dates_fut, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#ffe5ce'), fillcolor = '#ffe5ce',
                         mode= 'lines', opacity=0.2, showlegend=False)
                         )
-
+        fig.add_trace(
+            go.Scatter(x=mpl_dates_fut, y=median, mode='lines', name='forecast with 75% and 95% CI') 
+        )
 
         fig.update_layout(
         xaxis_title="Date",
