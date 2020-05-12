@@ -116,7 +116,7 @@ def plot_cases(
         fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1],  fill='tonextx', line=dict(width=0.5, color='#ffe5ce'), fillcolor = '#ffe5ce',
                         mode= 'lines', opacity=0.2, showlegend=False))
         fig.add_trace(
-            go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', name='forecast with and 95% CI') 
+            go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', name='Fit with 95% CI') 
         )
     
     time2 = np.arange(0, num_days_future)
@@ -161,7 +161,7 @@ def plot_cases(
                         mode= 'lines', opacity=0.2, showlegend=False)
                         )
         fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=median, mode='lines', name='forecast with 75% and 95% CI') 
+            go.Scatter(x=mpl_dates_fut, y=median, mode='lines', name='Forecast with 75% and 95% CI') 
         )
 
         fig.update_layout(
