@@ -12,6 +12,7 @@ gunicorn = "*"
 plotly = "*"
 pandas = "*"
 matplotlib = "*"
+pymc3 = "*"
 
 [requires]
 python_version = "3"

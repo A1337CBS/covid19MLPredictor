@@ -35,6 +35,7 @@ def plot_cases(
     week_interval=None,
     colors=("tab:blue", "tab:orange"),
     country="Qatar",
+    second_graph=False,
 ):
     """
         Plots the new cases, the fit, forecast and lambda_t evolution
@@ -180,6 +181,7 @@ def plot_cases(
     # ax.fill_between(
     #     mpl_dates, percentiles[0], percentiles[1], alpha=0.2, color=colors[1]
     # )
+    #if(second_graph = False):
     # fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0], fill='tonexty', fillcolor='#ffe5ce',
     #                 mode= 'none', opacity=0.2, showlegend=False))
     # fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1], fill='tonexty', fillcolor = '#ffe5ce',
@@ -192,13 +194,14 @@ def plot_cases(
     # ax.fill_between(
     #     mpl_dates, percentiles[0], percentiles[1], alpha=0.2, color=colors[1]
     # )
-    fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0], fill='none', stackgroup='one', fillcolor='#FFCFD0',
-                    mode= 'none', opacity=0.2, showlegend=False))
-    fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1], fill='tonext', stackgroup='one', fillcolor = '#FFCFD0',
-                    mode= 'none', opacity=0.2, showlegend=False))
-    fig.add_trace(
-    go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', name='Fit with 95% CI',fillcolor="#ff800f")
-    )
+    if(second_graph == False):
+        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0], fill='none', line=dict(width=0.5, color='#FFCFD0'), fillcolor='#FFCFD0',
+                        mode= 'lines', opacity=0.2, showlegend=False))
+        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#FFCFD0'), fillcolor = '#FFCFD0',
+                        mode= 'lines', opacity=0.2, showlegend=False))
+        fig.add_trace(
+        go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', name='Fit with 95% CI',fillcolor="#ff800f")
+        )
 
 
     time2 = np.arange(0, num_days_future)
@@ -222,20 +225,21 @@ def plot_cases(
     mpl_dates_fut = matplotlib.dates.num2date(mpl_dates_fut)
     print(median)
     print(mpl_dates_fut)
-    fig.add_trace(
-        go.Scatter(x=mpl_dates_fut, y=median, mode='markers', name='forecast with 75% and 95% CI') 
-    )
+    if(second_graph == False):
+        fig.add_trace(
+            go.Scatter(x=mpl_dates_fut, y=median, mode='markers', name='forecast with 75% and 95% CI') 
+        )
 
 
-    fig.update_layout(
-    xaxis_title="Date",
-    yaxis_title="New confirmed cases in Qatar",
-    font=dict(
-        #family="Courier New, monospace",
-        size=14,
-        color="#7f7f7f"
-    )
-)
+        fig.update_layout(
+        xaxis_title="Date",
+        yaxis_title="New confirmed cases in Qatar",
+        font=dict(
+            #family="Courier New, monospace",
+            size=14,
+            color="#7f7f7f"
+            )
+        )
     # ax.fill_between(
     #     mpl_dates_fut, percentiles[0], percentiles[1], alpha=0.1, color=colors[1]
     # )
@@ -263,63 +267,68 @@ def plot_cases(
     # ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%m/%d"))
 
     # # ax = axes[0][1]
+    
+    if(second_graph == True):
+        time = np.arange(-diff_to_0, -diff_to_0 + len_sim)
+        lambda_t = trace["lambda_t"][:, :]
+        μ = trace["mu"][:, None]
+        mpl_dates = conv_time_to_mpl_dates(time) + diff_data_sim + num_days_data
 
-    # # time = np.arange(-diff_to_0, -diff_to_0 + len_sim)
-    # # lambda_t = trace["lambda_t"][:, :]
-    # # μ = trace["mu"][:, None]
-    # # mpl_dates = conv_time_to_mpl_dates(time) + diff_data_sim + num_days_data
+        # ax.plot(mpl_dates, np.median(lambda_t - μ, axis=0), color=colors[1], linewidth=2)
+        fig.add_trace(
+            go.Scatter(x=mpl_dates, y=np.median(lambda_t - μ, axis=0), mode='lines', name='effective\ngrowth rate $\lambda_t^*$')
+        )
+        # ax.fill_between(
+        #     mpl_dates,
+        #     np.percentile(lambda_t - μ, q=2.5, axis=0),
+        #     np.percentile(lambda_t - μ, q=97.5, axis=0),
+        #     alpha=0.15,
+        #     color=colors[1],
+        # )
 
-    # # ax.plot(mpl_dates, np.median(lambda_t - μ, axis=0), color=colors[1], linewidth=2)
-    # # ax.fill_between(
-    # #     mpl_dates,
-    # #     np.percentile(lambda_t - μ, q=2.5, axis=0),
-    # #     np.percentile(lambda_t - μ, q=97.5, axis=0),
-    # #     alpha=0.15,
-    # #     color=colors[1],
-    # # )
+        # ax.set_ylabel("effective\ngrowth rate $\lambda_t^*$")
 
-    # # ax.set_ylabel("effective\ngrowth rate $\lambda_t^*$")
-
-    # # # ax.set_ylim(-0.15, 0.45)
-    # # ylims = ax.get_ylim()
-    # # ax.hlines(0, start_date_mpl, end_date_mpl, linestyles=":")
-    # # delay = matplotlib.dates.date2num(date_data_end) - np.percentile(
-    # #     trace["delay"], q=75
-    # # )
-    # # ax.vlines(delay, ylims[0], ylims[1], linestyles="-", colors=["tab:red"])
-    # # ax.set_ylim(*ylims)
-    # # ax.text(
-    # #     delay + 0.5,
-    # #     ylims[1] - 0.04 * np.diff(ylims),
-    # #     "unconstrained because\nof reporting delay",
-    # #     color="tab:red",
-    # #     verticalalignment="top",
-    # # )
-    # # ax.text(
-    # #     delay - 0.5,
-    # #     ylims[1] - 0.04 * np.diff(ylims),
-    # #     "constrained\nby data",
-    # #     color="tab:red",
-    # #     horizontalalignment="right",
-    # #     verticalalignment="top",
-    # # )
-    # # ax.xaxis.set_major_locator(
-    # #     matplotlib.dates.WeekdayLocator(
-    # #         interval=week_inter_right, byweekday=matplotlib.dates.SU
-    # #     )
-    # # )
-    # # ax.xaxis.set_minor_locator(matplotlib.dates.DayLocator())
-    # # ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%m/%d"))
-    # # ax.set_xlim(start_date_mpl, end_date_mpl)
+        # ax.set_ylim(-0.15, 0.45)
+        # ylims = ax.get_ylim()
+        # ax.hlines(0, start_date_mpl, end_date_mpl, linestyles=":")
+        # delay = matplotlib.dates.date2num(date_data_end) - np.percentile(
+        #     trace["delay"], q=75
+        # )
+        # ax.vlines(delay, ylims[0], ylims[1], linestyles="-", colors=["tab:red"])
+        # ax.set_ylim(*ylims)
+        # ax.text(
+        #     delay + 0.5,
+        #     ylims[1] - 0.04 * np.diff(ylims),
+        #     "unconstrained because\nof reporting delay",
+        #     color="tab:red",
+        #     verticalalignment="top",
+        # )
+        # ax.text(
+        #     delay - 0.5,
+        #     ylims[1] - 0.04 * np.diff(ylims),
+        #     "constrained\nby data",
+        #     color="tab:red",
+        #     horizontalalignment="right",
+        #     verticalalignment="top",
+        # )
+        # ax.xaxis.set_major_locator(
+        #     matplotlib.dates.WeekdayLocator(
+        #         interval=week_inter_right, byweekday=matplotlib.dates.SU
+        #     )
+        # )
+        # ax.xaxis.set_minor_locator(matplotlib.dates.DayLocator())
+        # ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%m/%d"))
+        # ax.set_xlim(start_date_mpl, end_date_mpl)
 
     # axes[0][0].set_visible(False)
 
     # plt.subplots_adjust(wspace=0.4, hspace=0.3)
 
     #True new_cases_observed Data trace
-    fig.add_trace(
-    go.Scatter(x=mpl_dates, y=new_cases_obs, mode='markers', name='Data')
-    )
+    if(second_graph == False):
+        fig.add_trace(
+        go.Scatter(x=mpl_dates, y=new_cases_obs, mode='markers', name='Data')
+        )
 
     return fig
 
@@ -360,7 +369,7 @@ bd = date_begin_data
 sim_bd = bd - datetime.timedelta(days=diff_data_sim)
 
 
-mpl_fig = plot_cases(
+fig = plot_cases(
     trace,
     new_cases_obs,
     date_begin_sim=sim_bd,
@@ -374,7 +383,19 @@ mpl_fig = plot_cases(
 )
 
 
-fig = mpl_fig
+# fig_growth_rate = plot_cases(
+#     trace,
+#     new_cases_obs,
+#     date_begin_sim=sim_bd,
+#     diff_data_sim=16,
+#     start_date_plot=None,
+#     end_date_plot=None,
+#     ylim=1000,
+#     week_interval=2,
+#     colors=("tab:blue", "tab:orange"),
+#     country="Qatar",
+#     second_graph=True
+# )
 
 # 2 column layout. 1st column width = 4/12
 # https://dash-bootstrap-components.opensource.faculty.ai/l/components/layout
