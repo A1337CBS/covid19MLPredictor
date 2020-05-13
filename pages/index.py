@@ -185,10 +185,18 @@ def plot_cases(
 
         fig.update_layout(
         yaxis=dict(range=[0,3500]),
+        xaxis=dict(range=[mpl_dates[0],mpl_dates_fut[-1] ]),
         template='ggplot2',
         xaxis_title="Date",
         yaxis_title="New confirmed cases in Qatar",
-        autosize=True,
+        #autosize=True,
+        margin=dict(
+            l=50,
+            r=50,
+            b=100,
+            t=70,
+            pad=4
+        ),
         height=550,
         font=dict(
             #family="Courier New, monospace",
@@ -206,7 +214,7 @@ def plot_cases(
                 ),
             )
         )
-        fig.update_yaxes(automargin=True)
+        
 
     
     if(second_graph == True):
@@ -302,6 +310,7 @@ def plot_cases(
         go.Scatter(x=mpl_dates, y=new_cases_obs, mode='markers', name='Reported Cases')
         )
 
+    fig.update_yaxes(automargin=True)
     return fig
 jhu = JHU(True)
 #It is important to download the dataset!
@@ -371,7 +380,7 @@ column1 = dbc.Jumbotron([
                 [
                 dbc.Card(
                 [
-                        html.H5("New Case Forecast", className="card-title"),
+                        html.H5("New Case(s) Forecast", className="card-title"),
                         #html.P("1023"),
                         dash_table.DataTable(
                         id='table',
@@ -456,7 +465,12 @@ column2 = dbc.Col(
                             id="info-container",
                             className="row container-display",
                         ),
-        dcc.Graph(figure=fig),
+        dcc.Graph(
+            figure=fig,
+            # config={
+            #     'displayModeBar': False
+            #     }
+        ),
         
         dbc.Row([
             html.H4("Last updated on "+str(df_obs.index.values[-1])[:10], style={'text-align': 'center'}),
@@ -473,7 +487,7 @@ column3 = dbc.Col(
         html.H3("Effective Growth Rate - Qatar"),
         dcc.Graph(
             id='small_graph',
-            figure=fig_growth_rate
+            figure=fig_growth_rate,
         )
     ],
     md=6,

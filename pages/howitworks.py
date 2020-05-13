@@ -42,6 +42,8 @@ row2 = dbc.Row(
              #####    1- Shehel Yoosuf
              #####    2- Ahmed Aziz
              
+            To contribute to this project please checkout the source on github: https://github.com/A1337CBS/covid19MLPredictor
+
             """
         ),
 
