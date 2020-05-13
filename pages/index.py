@@ -163,24 +163,24 @@ def plot_cases(
 
         #Add markers for 'school shutdown', 'airport shutdown', 'ramadan and mask'
         fig.add_annotation(
-            x=mpl_dates_fut[2],
-            y=median[5],
-            text="School shutdown")
-        # fig.add_annotation(
-        #             x=4,
-        #             y=4,
-        #             text="Airport shutdown")
-        # fig.add_annotation(
-        #             x=4,
-        #             y=4,
-        #             text="Ramadan and mask")
+            x=mpl_dates[7],
+            y=50,
+            text="School Shutdown")
+        fig.add_annotation(
+                    x=mpl_dates[15],
+                   y=250,
+                    text="Border Shutdown/Contact Restriction")
+        fig.add_annotation(
+                    x=mpl_dates[51],
+                    y=20,
+                    text="Ramadan and Mandatory Masks")
         fig.update_annotations(dict(
                     xref="x",
                     yref="y",
                     showarrow=True,
                     arrowhead=7,
                     ax=0,
-                    ay=-40
+                    ay=-20
         ))
 
         fig.update_layout(
@@ -323,7 +323,6 @@ bd = date_begin_data
 # first observation by default
 sim_bd = bd - datetime.timedelta(days=diff_data_sim)
 
-
 fig = plot_cases(
     trace,
     new_cases_obs,
@@ -447,7 +446,7 @@ column2 = dbc.Col(
         dcc.Graph(figure=fig),
         
         dbc.Row([
-            html.H4("Last updated on 12/05/2020", style={'text-align': 'center'}),
+            html.H4("Model Last updated with Data from "+str(df_obs.index.values[-1])[:10], style={'text-align': 'center'}),
             ], justify='end', className="h-20",style={"padding":"2.5rem",'text-align': 'center'},
             ),
     ],
