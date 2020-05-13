@@ -459,7 +459,7 @@ column2 = dbc.Col(
         dcc.Graph(figure=fig),
         
         dbc.Row([
-            html.H4("Model Last updated with Data from "+str(df_obs.index.values[-1])[:10], style={'text-align': 'center'}),
+            html.H4("Last updated on "+str(df_obs.index.values[-1])[:10], style={'text-align': 'center'}),
             ], justify='end', className="h-20",style={"padding":"2.5rem",'text-align': 'center'},
             ),
     ],
