@@ -184,6 +184,7 @@ def plot_cases(
         ))
 
         fig.update_layout(
+        yaxis=dict(range=[0,3500]),
         template='ggplot2',
         xaxis_title="Date",
         yaxis_title="New confirmed cases in Qatar",
@@ -337,7 +338,7 @@ def plot_cases(
         )
 
     return fig
-jhu = JHU()
+jhu = JHU(True)
 #It is important to download the dataset!
 #One could also parse true to the constructor of the class to force an auto download
 jhu.download_all_available_data(); 
@@ -356,6 +357,8 @@ df4Table = pd.read_csv('data/model_output.csv')
 
 df4Table = df4Table.loc[(df4Table['DT'] >= "2020-05-07")]
 df_obs = jhu.get_new_confirmed(country='Qatar', begin_date=date_begin_data)
+
+print (df_obs)
 new_cases_obs = (df_obs['confirmed'].values)
 
 df4Table.replace(0, np.nan, inplace=True)
