@@ -210,6 +210,7 @@ def plot_cases(
 
     
     if(second_graph == True):
+        #Plot growth rate Graph
         filename = 'data/trace_lambda.pkl'
         infile = open(filename,'rb')
         trace_lambda_t = pickle.load(infile)
@@ -239,63 +240,27 @@ def plot_cases(
             go.Scatter(x=mpl_dates, y=np.median(lambda_t - μ, axis=0), mode='lines', line=dict(color='#f21146'), name='Effective Growth Rate (Alpha)')# $\lambda_t^*$')
         )
 
-        fig.add_shape(
-        # Line Vertical
-        dict(
-            type="line",
-            yref= 'paper', 
-            y0= 0, y1= 1,
-            xref= 'x', 
-            #CHANGE X0 AND X1 ONLY
-            x0= mpl_dates[23], x1= mpl_dates[23],
-            name="School Shutdown",
-            line=dict(
-                color="#1b4703",
-                width=2
-            )
-        ))
-        fig.add_shape(
-        dict(
-            type="line",
-            name="Border Shutdown/Contact Restriction",
-            yref= 'paper', 
-            y0= 0, y1= 1,
-            xref= 'x', 
-            #CHANGE X0 AND X1 ONLY
-            x0= mpl_dates[31], x1= mpl_dates[31],
-            line=dict(
-                color="#097a14",
-                width=2
-            )
-        ))
-        fig.add_shape(
-        dict(
-            type="line",
-            name="Ramadan",
-            yref= 'paper', 
-            y0= 0, y1= 1,
-            xref= 'x', 
-            #CHANGE X0 AND X1 ONLY
-            x0= mpl_dates[67], x1= mpl_dates[67],
-            line=dict(
-                color="#50bd07",
-                width=2
-            )
-        ))
-        fig.add_shape(
-        dict(
-            type="line",
-            yref= 'paper', 
-            name="Mask Made Compulsory",
-            y0= 0, y1= 1,
-            xref= 'x', 
-            #CHANGE X0 AND X1 ONLY
-            x0= mpl_dates[70], x1= mpl_dates[70],
-            line=dict(
-                color="#abbd07",
-                width=2
-            )
+        maxVertY = np.max(np.percentile(lambda_t - μ, q=97.5, axis=0))
+        minVertY = np.min(np.percentile(lambda_t - μ, q=2.5, axis=0))
+        # Vertical Lines 
+        fig.add_trace(
+            go.Scatter(x=[mpl_dates[23],mpl_dates[23] ], y=[minVertY, maxVertY], mode='lines', 
+            line=dict(dash="dashdot",color='#1b4703'), name='School Shutdown')
         )
+
+        fig.add_trace(
+            go.Scatter(x=[mpl_dates[31],mpl_dates[31] ], y=[minVertY, maxVertY], mode='lines', 
+            line=dict(dash="dashdot",color='#097a14'), name='Border Shutdown/Contact Restriction')
+        )
+
+        fig.add_trace(
+            go.Scatter(x=[mpl_dates[67],mpl_dates[67] ], y=[minVertY, maxVertY], mode='lines', 
+            line=dict(dash="dashdot",color='#50bd07'), name='Ramadan')
+        )
+
+        fig.add_trace(
+            go.Scatter(x=[mpl_dates[70],mpl_dates[70] ], y=[minVertY, maxVertY], mode='lines', 
+            line=dict(dash="dashdot",color='#abbd07'), name='Masks Made Compulsory')
         )
 
         
@@ -334,7 +299,7 @@ def plot_cases(
     #True new_cases_observed Data trace
     if(second_graph == False):
         fig.add_trace(
-        go.Scatter(x=mpl_dates, y=new_cases_obs, mode='markers', name='Data')
+        go.Scatter(x=mpl_dates, y=new_cases_obs, mode='markers', name='Reported Cases')
         )
 
     return fig
@@ -520,6 +485,7 @@ column4 = dbc.Col(
         # html.H1("Covid19 Forecast - Qatar"),
              html.Hr(),
             html.H3(" "),
+            html.P(" "),
         # dcc.Graph(
         #     id='main_graph',
         #     figure={

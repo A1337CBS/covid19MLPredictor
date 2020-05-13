@@ -8,9 +8,9 @@ from dash.dependencies import Input, Output
 # Imports from this application
 from app import app
 
-# 2 column layout. 1st column width = 4/12
+# 2 rows layout.
 # https://dash-bootstrap-components.opensource.faculty.ai/l/components/layout
-column1 = dbc.Col(
+row1 = dbc.Row(
     [
         dcc.Markdown(
             """
@@ -24,16 +24,29 @@ column1 = dbc.Col(
             
             As the model produces coarse estimations based on a very simplified model and noisy data, it should be interpreted with the confidence interval and there
             is no guarantee the estimations will materialize.  
+
             """
         ),
+        html.Br(), 
     ],
-    md=4,
+
 )
 
-column2 = dbc.Col(
+row2 = dbc.Row(
     [
+            dcc.Markdown(
+            """
+        
+            ## Contributors
 
-    ]
+             #####    1- Shehel Yoosuf
+             #####    2- Ahmed Aziz
+             
+            """
+        ),
+
+
+    ],
 )
 
-layout = dbc.Row([column1, column2])
+layout = dbc.Col([row1, row2], className='mt-4', width={"size": 4, "offset": 4},md=4, align="center",)
