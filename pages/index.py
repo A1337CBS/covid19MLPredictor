@@ -237,7 +237,7 @@ def plot_cases(
                         mode= 'lines', opacity=0.2, showlegend=False)
                         )
         fig.add_trace(
-            go.Scatter(x=mpl_dates, y=np.median(lambda_t - μ, axis=0), mode='lines', line=dict(color='#f21146'), name='Effective Growth Rate (Alpha)')# $\lambda_t^*$')
+            go.Scatter(x=mpl_dates, y=np.median(lambda_t - μ, axis=0), mode='lines', line=dict(color='#f21146'), name='Effective Growth Rate (Lamda)')# $\lambda_t^*$')
         )
 
         maxVertY = np.max(np.percentile(lambda_t - μ, q=97.5, axis=0))
