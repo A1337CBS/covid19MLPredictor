@@ -11,7 +11,7 @@ from pages import index, predictions, insights, process, howitworks
 
 # Navbar docs: https://dash-bootstrap-components.opensource.faculty.ai/l/components/navbar
 navbar = dbc.NavbarSimple(
-    brand='1337CBS',
+    brand='Covid19 Modeling Qatar',
     brand_href='/', 
     children=[
         dbc.NavItem(dcc.Link('How it works', href='/howitworks', className='nav-link')), 

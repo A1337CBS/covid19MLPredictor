@@ -109,12 +109,12 @@ def plot_cases(
             np.percentile(new_cases_past, q=97.5, axis=0),
         )
         
-        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0],  fill='none', line=dict(width=0.5, color='#ffe5ce'), fillcolor='#ffe5ce',
+        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0],  fill='none', line=dict(width=0.8, color='#ffdaba'), fillcolor='#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False))
-        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1],  fill='tonextx', line=dict(width=0.5, color='#ffe5ce'), fillcolor = '#ffe5ce',
+        fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1],  fill='tonextx', line=dict(width=0.8, color='#ffdaba'), fillcolor = '#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False))
         fig.add_trace(
-            go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot"), name='Fit with 95% CI') 
+            go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot", color="#f21146"), name='Fit with 95% CI') 
         )
     
     time2 = np.arange(0, num_days_future)
@@ -133,11 +133,11 @@ def plot_cases(
     if(second_graph == False):
         # 75% CI
         fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffe5ce'), fillcolor='#ffe5ce',
+            go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.8, color='#ffe5ce'), fillcolor='#ffe5ce',
                         mode= 'lines',name="75%-top", opacity=0.2, showlegend=False)
         )
         fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#ffe5ce'), fillcolor = '#ffe5ce',
+            go.Scatter(x=mpl_dates_fut, y=percentiles[1], fill='tonextx', line=dict(width=0.8, color='#ffe5ce'), fillcolor = '#ffe5ce',
                         mode= 'lines',name="75%-bottom", opacity=0.2, showlegend=False)
                         )
 
@@ -150,15 +150,15 @@ def plot_cases(
 
         
         fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.5, color='#ffdaba'), fillcolor='#ffdaba',
+            go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.8, color='#ffdaba'), fillcolor='#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False)
         )
         fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=percentiles[1], fill='tonextx', line=dict(width=0.5, color='#ffdaba'), fillcolor = '#ffdaba',
+            go.Scatter(x=mpl_dates_fut, y=percentiles[1], fill='tonextx', line=dict(width=0.8, color='#ffdaba'), fillcolor = '#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False)
                         )
         fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=median, mode='lines', name='Forecast with 75% and 95% CI') 
+            go.Scatter(x=mpl_dates_fut, y=median, mode='lines', line=dict(color="#f21146"), name='Forecast with 75% and 95% CI') 
         )
 
         #Add markers for 'school shutdown', 'airport shutdown', 'ramadan and mask'
@@ -184,6 +184,7 @@ def plot_cases(
         ))
 
         fig.update_layout(
+        template='ggplot2',
         xaxis_title="Date",
         yaxis_title="New confirmed cases in Qatar",
         autosize=True,
@@ -234,7 +235,7 @@ def plot_cases(
                         mode= 'lines', opacity=0.2, showlegend=False)
                         )
         fig.add_trace(
-            go.Scatter(x=mpl_dates, y=np.median(lambda_t - μ, axis=0), mode='lines', name='Effective Growth Rate (Alpha)')# $\lambda_t^*$')
+            go.Scatter(x=mpl_dates, y=np.median(lambda_t - μ, axis=0), mode='lines', line=dict(color='#f21146'), name='Effective Growth Rate (Alpha)')# $\lambda_t^*$')
         )
 
         fig.add_shape(
@@ -245,15 +246,60 @@ def plot_cases(
             y0= 0, y1= 1,
             xref= 'x', 
             #CHANGE X0 AND X1 ONLY
-            x0= mpl_dates[5], x1= mpl_dates[5],
+            x0= mpl_dates[23], x1= mpl_dates[23],
+            name="School Shutdown",
             line=dict(
-                color="red",
+                color="#1b4703",
                 width=2
             )
         ))
+        fig.add_shape(
+        dict(
+            type="line",
+            name="Border Shutdown/Contact Restriction",
+            yref= 'paper', 
+            y0= 0, y1= 1,
+            xref= 'x', 
+            #CHANGE X0 AND X1 ONLY
+            x0= mpl_dates[31], x1= mpl_dates[31],
+            line=dict(
+                color="#097a14",
+                width=2
+            )
+        ))
+        fig.add_shape(
+        dict(
+            type="line",
+            name="Ramadan",
+            yref= 'paper', 
+            y0= 0, y1= 1,
+            xref= 'x', 
+            #CHANGE X0 AND X1 ONLY
+            x0= mpl_dates[67], x1= mpl_dates[67],
+            line=dict(
+                color="#50bd07",
+                width=2
+            )
+        ))
+        fig.add_shape(
+        dict(
+            type="line",
+            yref= 'paper', 
+            name="Mask Made Compulsory",
+            y0= 0, y1= 1,
+            xref= 'x', 
+            #CHANGE X0 AND X1 ONLY
+            x0= mpl_dates[70], x1= mpl_dates[70],
+            line=dict(
+                color="#abbd07",
+                width=2
+            )
+        )
+        )
 
         
         fig.update_layout(
+            template = 'ggplot2',
             annotations=[
                 dict(
                     x=10.7,
@@ -491,7 +537,7 @@ column4 = dbc.Col(
 )
 
 layout = dbc.Container([
-            html.H1("Covid19 Forecast - Qatar"),
+            #html.H1("Covid19 Forecast - Qatar"),
             html.Hr(),
             dbc.Row([column1, column2],justify="center",),
             dbc.Row([column3, column4],justify="center",)
