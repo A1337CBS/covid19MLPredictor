@@ -11,7 +11,7 @@ from pages import index, predictions, insights, process, howitworks
 
 # Navbar docs: https://dash-bootstrap-components.opensource.faculty.ai/l/components/navbar
 navbar = dbc.NavbarSimple(
-    brand='Covid19 Modeling Qatar',
+    brand='Covid19 Modeling - Qatar',
     brand_href='/', 
     children=[
         dbc.NavItem(dcc.Link('How it works', href='/howitworks', className='nav-link')), 
@@ -37,7 +37,7 @@ footer = dbc.Container(
         dbc.Col(
             html.P(
                 [
-                    html.Span('1337CBS', className='mr-2'), 
+                    html.Span('HBKU', className='mr-2'), 
                 #    html.A(html.I(className='fas fa-envelope-square mr-1'), href='mailto:<you>@<provider>.com'), 
                     html.A(html.I(className='fab fa-github-square mr-1'), href='https://github.com/<you>/<repo>'), 
                  #   html.A(html.I(className='fab fa-linkedin mr-1'), href='https://www.linkedin.com/in/<you>/'), 
