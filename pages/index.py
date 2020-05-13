@@ -245,7 +245,7 @@ def plot_cases(
                         mode= 'lines', opacity=0.2, showlegend=False)
                         )
         fig.add_trace(
-            go.Scatter(x=mpl_dates, y=np.median(lambda_t - μ, axis=0), mode='lines', line=dict(color='#f21146'), name='Effective Growth Rate (Lamda)')# $\lambda_t^*$')
+            go.Scatter(x=mpl_dates, y=np.median(lambda_t - μ, axis=0), mode='lines', line=dict(color='#f21146'), name='Effective Growth Rate')# $\lambda_t^*$')
         )
 
         maxVertY = np.max(np.percentile(lambda_t - μ, q=97.5, axis=0))
@@ -270,7 +270,10 @@ def plot_cases(
             go.Scatter(x=[mpl_dates[70],mpl_dates[70] ], y=[minVertY, maxVertY], mode='lines', 
             line=dict(dash="dashdot",color='#abbd07'), name='Masks Made Compulsory')
         )
-
+        fig.add_trace(
+            go.Scatter(x=[mpl_dates[0],mpl_dates[-1] ], y=[0, 0], mode='lines', 
+            line=dict(dash="dot",color='black'), name='Critical Point')
+        )
         
         fig.update_layout(
             template = 'ggplot2',
@@ -499,7 +502,20 @@ column4 = dbc.Col(
         # html.H1("Covid19 Forecast - Qatar"),
              html.Hr(),
             html.H3(" "),
-            html.P(" "),
+            html.P("""
+            The model uses a time-dependent transmission/spreading rate following the assumption that a signicant change in transmission rate might
+            have occured at these points in time. This is modelled though change points which corresponds to Government policy
+            interventions and events that could affect the transmission rate. The current model includes the following change points"""),
+            html.Ol([
+                html.Li("10 March 2020: Universities and schools close until further notice."),
+                html.Li("18 March 2020: Border restriction including restrictions on inbound passengers."),
+                html.Li("23 April 2020: Beginning of Ramadan."),
+                html.Li("26 April 2020: Masks made compulsory for all shoppers, service sector and construction sector employees.")]
+            ),
+            html.P("""
+            When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic. 
+            Our preliminary models show Qatar is close to achieving this. #StayHome
+            """)
         # dcc.Graph(
         #     id='main_graph',
         #     figure={
