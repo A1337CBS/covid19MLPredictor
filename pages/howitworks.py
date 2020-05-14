@@ -22,8 +22,8 @@ row1 = dbc.Row(
             are done for the country of Qatar by looking at daily confirmed cases. 
             The SIR model is extended to account for time delay of reporting, weekend effects and, government interventions and other major events.
             
-            As the model produces coarse estimations based on a very simplified model and noisy data, it should be interpreted with the confidence interval and there
-            is no guarantee the estimations will materialize.  
+            As the model produces coarse estimations based on a very simplified model and noisy response data, i.e., daily confirmed cases, it should be interpreted considering the confidence intervals and there
+            is also no guarantee the estimations will materialize.    
 
             """
         ),

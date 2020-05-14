@@ -116,7 +116,20 @@ def plot_cases(
         fig.add_trace(
             go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot", color="#f21146"), name='Fit with 95% CI') 
         )
-    
+        fig.add_trace(go.Scatter(
+            x=[mpl_dates[7], mpl_dates[15], mpl_dates[51], mpl_dates[54]],
+            y=[2000, 2000, 2000, 2000],
+            mode="markers",
+            marker_symbol="cross-dot",
+            marker_line_color="midnightblue",
+            marker_color="lightskyblue",
+            marker_size=12,
+            marker_line_width=2,
+            name="Events and Interventions",
+            text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)"],
+            textposition="top center"
+        ))
+        
     time2 = np.arange(0, num_days_future)
     mpl_dates_fut = conv_time_to_mpl_dates(time2) + diff_data_sim + num_days_data
     cases_future = new_cases_sim[:, num_days_data : num_days_data + num_days_future].T
@@ -161,27 +174,30 @@ def plot_cases(
             go.Scatter(x=mpl_dates_fut, y=median, mode='lines', line=dict(color="#f21146"), name='Forecast with 75% and 95% CI') 
         )
 
+
+        
+
         #Add markers for 'school shutdown', 'airport shutdown', 'ramadan and mask'
-        fig.add_annotation(
-            x=mpl_dates[7],
-            y=50,
-            text="School Shutdown")
-        fig.add_annotation(
-                    x=mpl_dates[15],
-                   y=250,
-                    text="Border Shutdown/Contact Restriction")
-        fig.add_annotation(
-                    x=mpl_dates[51],
-                    y=20,
-                    text="Ramadan and Mandatory Masks")
-        fig.update_annotations(dict(
-                    xref="x",
-                    yref="y",
-                    showarrow=True,
-                    arrowhead=7,
-                    ax=0,
-                    ay=-20
-        ))
+        # fig.add_annotation(
+        #     x=mpl_dates[7],
+        #     y=50,
+        #     text="School Shutdown")
+        # fig.add_annotation(
+        #             x=mpl_dates[15],
+        #            y=250,
+        #             text="Border Shutdown/Contact Restriction")
+        # fig.add_annotation(
+        #             x=mpl_dates[51],
+        #             y=20,
+        #             text="Ramadan and Mandatory Masks")
+        # fig.update_annotations(dict(
+        #             xref="x",
+        #             yref="y",
+        #             showarrow=True,
+        #             arrowhead=7,
+        #             ax=0,
+        #             ay=-20
+        # ))
 
         fig.update_layout(
         yaxis=dict(range=[0,3500]),
