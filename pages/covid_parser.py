@@ -14,6 +14,8 @@ import time
 # Imports from this application
 # from app import app
 
+#Parser written to get covid data from data.gov.qa
+
 def FileCheck(fn):
     try:
       open(fn, "r")
