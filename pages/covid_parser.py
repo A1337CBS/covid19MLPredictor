@@ -31,7 +31,8 @@ def get_covid_metrics_model():
     numRows = 200
     api_link = "https://www.data.gov.qa/api/records/1.0/search/?dataset=covid-19-cases-in-qatar&q=&rows="+str(numRows)+"&sort=-date&facet=date&start="+str(start)
     current_time = datetime.today().strftime('%Y_%m_%d')
-    file_name= "data/covid_data/covid_data_"+current_time+".csv"
+    #file_name= "data/covid_data/covid_data_"+current_time+".csv"
+    file_name = "data/covid_data/covid_data.csv"
     call_api =  True
     tries = 0
 
@@ -68,7 +69,7 @@ def get_covid_metrics_model():
                             df = df_new
                         
                         print("Writing to file")
-                        df.to_csv(file_name, sep=',', mode='w+', encoding='utf-8')
+                        df.to_csv(file_name, index=None, mode='w+', encoding='utf-8')
                         if(numberOfResults>start+numRows):
                             start = start + numRows
                         else:
