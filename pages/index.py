@@ -519,8 +519,8 @@ column4 = dbc.Col(
              html.Hr(),
             html.H3(" "),
             html.P("""
-            The model uses a time-dependent transmission/spreading rate following the assumption that a signicant change in transmission rate might
-            have occured at these points in time. This is modelled though change points which corresponds to Government policy
+            The model uses a time-dependent transmission/spreading rate following the assumption that a signicant change in transmission rate 
+            may occur at certain points over the course of a pandemic. This is modelled though change points which corresponds to Government policy
             interventions and events that could affect the transmission rate. The current model includes the following change points"""),
             html.Ol([
                 html.Li("10 March 2020: Universities and schools close until further notice."),
