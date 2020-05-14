@@ -12,7 +12,8 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import time
 
-from plotly.tools import mpl_to_plotly
+import urllib.request as request
+import json
 from matplotlib import pyplot as plt
 import matplotlib
 import pickle
@@ -21,9 +22,31 @@ import datetime
 from covid19_inference.data_retrieval import *
 import dash_table
 
+
 # Imports from this application
 from app import app
 
+def get_covid_metrics():
+    api_link = "https://www.data.gov.qa/api/records/1.0/search/?dataset=covid-19-cases-in-qatar&q=&rows=1&sort=date&facet=date"
+    with request.urlopen(api_link) as response:
+        if response.getcode() == 200:
+            source = response.read()
+            data = json.loads(source)
+            try:
+                covid_cases={}
+                covid_cases['new_cases']       = data['records'][0]['fields']['number_of_new_positive_cases_in_last_24_hrs']
+                covid_cases['recovered_cases'] = data['records'][0]['fields']['total_number_of_recovered_cases_to_date']
+                covid_cases['active_cases']    = data['records'][0]['fields']['total_number_of_active_cases_undergoing_treatment_to_date']
+                covid_cases['death_cases']          = data['records'][0]['fields']['total_number_of_deaths_to_date']
+                return covid_cases
+            except:
+                return {"new_cases":"NA",
+                        "recovered_cases":"NA",
+                        "active_cases":"NA",
+                        "death_cases":"NA"}
+
+        else:
+            print('An error occurred while attempting to retrieve data from the API.')
 
 
 def plot_cases(
@@ -331,6 +354,7 @@ def plot_cases(
 
     fig.update_yaxes(automargin=True)
     return fig
+    
 jhu = JHU(True)
 #It is important to download the dataset!
 #One could also parse true to the constructor of the class to force an auto download
@@ -340,6 +364,7 @@ date_begin_data = datetime.datetime(2020,3,3)
 df_confirmed_new = jhu.get_new_confirmed(country='Qatar', begin_date=date_begin_data).iloc[-1]
 df_totals = jhu.get_confirmed_deaths_recovered(country='Qatar', begin_date=date_begin_data).iloc[-1]
 #new_cases_obs = (df['confirmed'].values)
+covid_cases = get_covid_metrics()
 
 filename = 'data/trace_new_cases.pkl'
 infile = open(filename,'rb')
@@ -439,7 +464,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4(df_confirmed_new.iloc[-1], id="newText", className='mr-2'),  
+                                        html.H4(covid_cases['new_cases'], id="newText", className='mr-2'),  
                                         html.P("New cases"),
                                         ])
                                     ],
@@ -450,7 +475,7 @@ column2 = dbc.Col(
                                     [   
                                         dbc.CardBody(
                                         [
-                                        html.H4(df_totals.iloc[2], id="recoveredText", className='mr-2'),  
+                                        html.H4(covid_cases['recovered_cases'], id="recoveredText", className='mr-2'),  
                                         html.P("Total Recovered"),
                                         ])
                                         
@@ -462,18 +487,18 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4(df_totals.iloc[0], id="confirmedText", className='mr-2'),  
-                                        html.P("Confirmed cases"),
+                                        html.H4(covid_cases['active_cases'], id="activeText", className='mr-2'),  
+                                        html.P("Active cases"),
                                         ])
                                     ],
-                                    id="confirmed",
+                                    id="active",
                                     className="mini_container",
                                 ),
                                 dbc.Card(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4(df_totals.iloc[1], id="deathsText", className='mr-2'),  
+                                        html.H4(covid_cases['death_cases'], id="deathsText", className='mr-2'),  
                                         html.P("Total Deaths"),
                                         ])
                                     ],
