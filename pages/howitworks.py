@@ -10,7 +10,23 @@ from app import app
 
 # 2 column layout. 1st column width = 4/12
 # https://dash-bootstrap-components.opensource.faculty.ai/l/components/layout
-column1 = dbc.Row([ 
+column1 = dbc.Col(
+    [
+            dcc.Markdown(
+            """
+        
+            ## Updates
+
+            Shehel Yoosuf  
+            Ahmed Aziz  
+              
+            For more info or feedback, email: shyoosuf@hbku.edu.qa
+            """
+        ),
+    ],
+    md=4,
+)
+column2 = dbc.Row([ 
         dbc.Col(
         [
             dcc.Markdown(
@@ -23,7 +39,7 @@ column1 = dbc.Row([
                 are done for the country of Qatar by looking at daily confirmed cases. 
                 The SIR model is extended to account for time delay of reporting, weekend effects and, change in infection transmission rates through government interventions and other major events.
                 
-                The data we use comes from the Qatar MoPH (Ministry of Public Health) public [repository](https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/information/).
+                The dataset used comes from the Qatar MoPH (Ministry of Public Health) public [repository](https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/information/).
                 We are constantly working on improving the model with additional information and assumptions. Meanwhile, as the model produces coarse estimations based on a very simplified model and noisy response data, i.e., daily confirmed cases, it should be interpreted with the confidence intervals and there
                 is also no guarantee the estimations will materialize.      
 
@@ -35,7 +51,7 @@ column1 = dbc.Row([
         )
     ], justify="center")
 
-column2 = dbc.Col(
+column3 = dbc.Col(
     [
             dcc.Markdown(
             """
@@ -52,4 +68,4 @@ column2 = dbc.Col(
     md=4,
 )
 
-layout = dbc.Row([column1, column2], className='mt-4', align="center", justify="center",)
+layout = dbc.Row([column2, column3], className='mt-4', align="center", justify="center",)

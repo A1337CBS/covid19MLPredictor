@@ -53,7 +53,7 @@ def get_covid_metrics():
 
 def plot_cases(
     trace,
-    new_cases_obs,
+    df,
     date_begin_sim,
     diff_data_sim,
     start_date_plot=None,
@@ -90,6 +90,8 @@ def plot_cases(
         return matplotlib.dates.date2num(
             [datetime.timedelta(days=float(date)) + date_begin_sim for date in arr]
     )
+    new_cases_obs = df["Number of New Positive Cases in Last 24 Hrs"].values
+    new_recovered = df["Number of New Recovered Cases in Last 24 Hrs"].values
     new_cases_sim = trace
     len_sim = trace.shape[1] + diff_data_sim
     if start_date_plot is None:
@@ -351,7 +353,11 @@ def plot_cases(
     #True new_cases_observed Data trace
     if(second_graph == False):
         fig.add_trace(
-        go.Scatter(x=mpl_dates, y=new_cases_obs, mode='markers', name='Reported Cases')
+        go.Scatter(x=mpl_dates, y=new_cases_obs, mode='markers', name='New Confirmed Cases')
+        )
+    if(second_graph == False):
+        fig.add_trace(
+        go.Scatter(x=mpl_dates, y=new_recovered, mode='markers', name='New Recovered Cases', line=dict(dash="dot",color='#75f26a'))
         )
 
     fig.update_yaxes(automargin=True)
@@ -377,7 +383,6 @@ df4Table = pd.read_csv('data/model_output.csv')
 df = pd.read_csv('data/covid_data.csv')
 df4Table = df4Table.loc[(df4Table['DT'] >= "2020-05-07")]
 
-new_cases_obs = (df['Number of New Positive Cases in Last 24 Hrs'].values)
 
 df4Table.replace(0, np.nan, inplace=True)
 df4Table.columns = ['Date', 'Observed', 'Model']
@@ -392,7 +397,7 @@ sim_bd = bd - datetime.timedelta(days=diff_data_sim)
 
 fig = plot_cases(
     trace,
-    new_cases_obs,
+    df,
     date_begin_sim=sim_bd,
     diff_data_sim=16,
     start_date_plot=None,
@@ -406,7 +411,7 @@ fig = plot_cases(
 
 fig_growth_rate = plot_cases(
     trace,
-    new_cases_obs,
+    df,
     date_begin_sim=sim_bd,
     diff_data_sim=16,
     start_date_plot=None,
