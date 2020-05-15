@@ -24,6 +24,15 @@ def get_covid_metrics_model():
     #Number of row results to call from api
     numRows = 200
     request.urlretrieve("https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/download/?format=csv&timezone=Asia/Baghdad&lang=en&use_labels_for_header=true&csv_separator=%3B", "data/covid_data.csv")
+    df = pd.read_csv('data/covid_data.csv', sep=';')
+    df = df.fillna(0)
+    for col in df.columns[1:]: 
+        df[col]=df[col].astype(int)
+    df['Date'] =pd.to_datetime(df.Date)
+    df = df.sort_values(by='Date')
+    df = df.iloc[3:]
+    df.to_csv('data/covid_data.csv', index=None)
+
     # api_link = "https://www.data.gov.qa/api/records/1.0/search/?dataset=covid-19-cases-in-qatar&q=&rows="+str(numRows)+"&sort=-date&facet=date&start="+str(start)
     # current_time = datetime.today().strftime('%Y_%m_%d')
     # #file_name= "data/covid_data/covid_data_"+current_time+".csv"
