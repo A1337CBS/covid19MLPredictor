@@ -35,6 +35,8 @@ def get_covid_metrics():
             try:
                 covid_cases={}
                 covid_cases['new_cases']       = data['records'][0]['fields']['number_of_new_positive_cases_in_last_24_hrs']
+                covid_cases['new_deaths']       = data['records'][0]['fields']['number_of_new_deaths_in_last_24_hrs']
+                covid_cases['new_recovered']       = data['records'][0]['fields']['number_of_new_recovered_cases_in_last_24_hrs']
                 covid_cases['recovered_cases'] = data['records'][0]['fields']['total_number_of_recovered_cases_to_date']
                 covid_cases['active_cases']    = data['records'][0]['fields']['total_number_of_active_cases_undergoing_treatment_to_date']
                 covid_cases['death_cases']          = data['records'][0]['fields']['total_number_of_deaths_to_date']
@@ -355,14 +357,14 @@ def plot_cases(
     fig.update_yaxes(automargin=True)
     return fig
     
-jhu = JHU(True)
+#jhu = JHU(True)
 #It is important to download the dataset!
 #One could also parse true to the constructor of the class to force an auto download
-jhu.download_all_available_data(); 
+#jhu.download_all_available_data(); 
 
 date_begin_data = datetime.datetime(2020,3,3)
-df_confirmed_new = jhu.get_new_confirmed(country='Qatar', begin_date=date_begin_data).iloc[-1]
-df_totals = jhu.get_confirmed_deaths_recovered(country='Qatar', begin_date=date_begin_data).iloc[-1]
+# df_confirmed_new = jhu.get_new_confirmed(country='Qatar', begin_date=date_begin_data).iloc[-1]
+# df_totals = jhu.get_confirmed_deaths_recovered(country='Qatar', begin_date=date_begin_data).iloc[-1]
 #new_cases_obs = (df['confirmed'].values)
 covid_cases = get_covid_metrics()
 
@@ -372,11 +374,10 @@ trace = pickle.load(infile)
 infile.close()
 
 df4Table = pd.read_csv('data/model_output.csv')
-
+df = pd.read_csv('data/covid_data.csv')
 df4Table = df4Table.loc[(df4Table['DT'] >= "2020-05-07")]
-df_obs = jhu.get_new_confirmed(country='Qatar', begin_date=date_begin_data)
 
-new_cases_obs = (df_obs['confirmed'].values)
+new_cases_obs = (df['Number of New Positive Cases in Last 24 Hrs'].values)
 
 df4Table.replace(0, np.nan, inplace=True)
 df4Table.columns = ['Date', 'Observed', 'Model']
@@ -464,7 +465,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4(covid_cases['new_cases'], id="newText", className='mr-2'),  
+                                        html.H5(covid_cases['new_cases'], id="newText", className='mr-2'),  
                                         html.P("New cases"),
                                         ])
                                     ],
@@ -472,10 +473,33 @@ column2 = dbc.Col(
                                     className="mini_container",
                                 ),
                                 dbc.Card(
+                                    [
+                                        dbc.CardBody(
+                                        [
+                                        html.H5(covid_cases['new_recovered'], id="newText", className='mr-2'),  
+                                        html.P("New Recovered"),
+                                        ])
+                                    ],
+                                    id="new",
+                                    className="mini_container",
+                                ),
+                                dbc.Card(
+                                    [
+                                        dbc.CardBody(
+                                        [
+                                        html.H5(covid_cases['new_deaths'], id="newText", className='mr-2'),  
+                                        html.P("New Deaths"),
+                                        ])
+                                    ],
+                                    id="new",
+                                    className="mini_container",
+                                ),
+
+                                dbc.Card(
                                     [   
                                         dbc.CardBody(
                                         [
-                                        html.H4(covid_cases['recovered_cases'], id="recoveredText", className='mr-2'),  
+                                        html.H5(covid_cases['recovered_cases'], id="recoveredText", className='mr-2'),  
                                         html.P("Total Recovered"),
                                         ])
                                         
@@ -487,7 +511,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4(covid_cases['active_cases'], id="activeText", className='mr-2'),  
+                                        html.H5(covid_cases['active_cases'], id="activeText", className='mr-2'),  
                                         html.P("Active cases"),
                                         ])
                                     ],
@@ -498,7 +522,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H4(covid_cases['death_cases'], id="deathsText", className='mr-2'),  
+                                        html.H5(covid_cases['death_cases'], id="deathsText", className='mr-2'),  
                                         html.P("Total Deaths"),
                                         ])
                                     ],
@@ -517,7 +541,7 @@ column2 = dbc.Col(
         ),
         
         dbc.Row([
-            html.H4("Last updated on "+str(df_obs.index.values[-1])[:10], style={'text-align': 'center'}),
+            html.H5("Last updated on "+str(df["Date"].values[-1]), style={'text-align': 'center'}),
             ], justify='end', className="h-20",style={"padding":"2.5rem",'text-align': 'center'},
             ),
     ],
@@ -553,7 +577,7 @@ column4 = dbc.Col(
                 html.Li("23 April 2020: Beginning of Ramadan."),
                 html.Li("26 April 2020: Masks made compulsory for all shoppers, service sector and construction sector employees.")]
             ),
-            html.P("""
+            html.H5("""
             When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic. 
             Our preliminary models show Qatar is close to achieving this. #StayHome
             """)
