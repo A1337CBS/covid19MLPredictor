@@ -359,10 +359,10 @@ def plot_cases(
         fig.add_trace(
         go.Scatter(x=mpl_dates, y=new_recovered, mode='markers', name='New Recovered Cases', line=dict(dash="dot",color='#75f26a'))
         )
-    if(second_graph == False):
-        fig.add_trace(
-        go.Scatter(x=mpl_dates, y=df["Number of New Tests in Last 24 Hrs"], mode='markers', name='Daily Test', line=dict(dash="dot",color='black'))
-        )
+    # if(second_graph == False):
+    #     fig.add_trace(
+    #     go.Scatter(x=mpl_dates, y=df["Number of New Tests in Last 24 Hrs"], mode='markers', name='Daily Test', line=dict(dash="dot",color='black'))
+    #     )
 
     fig.update_yaxes(automargin=True)
     return fig
