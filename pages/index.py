@@ -320,6 +320,9 @@ def plot_cases(
         
         fig.update_layout(
             template = 'ggplot2',
+            xaxis_title="Date",
+            yaxis_title="Effective Growth Rate",
+
             annotations=[
                 dict(
                     x=10.7,
