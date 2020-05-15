@@ -39,7 +39,7 @@ column2 = dbc.Row([
                 are done for the country of Qatar by looking at daily confirmed cases. 
                 The SIR model is extended to account for time delay of reporting, weekend effects and, change in infection transmission rates through government interventions and other major events.
                 
-                The dataset used comes from the Qatar MoPH (Ministry of Public Health) public [repository](https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/information/).
+                The dataset used comes from the Qatar's Open data portal for public [repository](https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/information/).
                 We are constantly working on improving the model with additional information and assumptions. Meanwhile, as the model produces coarse estimations based on a very simplified model and noisy response data, i.e., daily confirmed cases, it should be interpreted with the confidence intervals and there
                 is also no guarantee the estimations will materialize.      
 
