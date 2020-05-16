@@ -5,8 +5,6 @@ import pandas as pd
 from datetime import datetime
 import os
 import time
-# Imports from this application
-# from app import app
 
 #Parser written to get covid data from data.gov.qa
 
@@ -23,8 +21,8 @@ def get_covid_metrics_model():
     start = 0
     #Number of row results to call from api
     numRows = 200
-    request.urlretrieve("https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/download/?format=csv&timezone=Asia/Baghdad&lang=en&use_labels_for_header=true&csv_separator=%3B", "data/covid_data.csv")
-    df = pd.read_csv('data/covid_data.csv', sep=';')
+    request.urlretrieve("https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/download/?format=csv&timezone=Asia/Baghdad&lang=en&use_labels_for_header=true&csv_separator=%2C", "data/covid_data.csv")
+    df = pd.read_csv('data/covid_data.csv', sep=',')
     df = df.fillna(0)
     for col in df.columns[1:]: 
         df[col]=df[col].astype(int)
@@ -33,6 +31,7 @@ def get_covid_metrics_model():
     df = df.iloc[3:]
     df.to_csv('data/covid_data.csv', index=None)
 
+    #OLD METHOD
     # api_link = "https://www.data.gov.qa/api/records/1.0/search/?dataset=covid-19-cases-in-qatar&q=&rows="+str(numRows)+"&sort=-date&facet=date&start="+str(start)
     # current_time = datetime.today().strftime('%Y_%m_%d')
     # #file_name= "data/covid_data/covid_data_"+current_time+".csv"
@@ -102,20 +101,3 @@ def get_covid_metrics_model():
 
 get_covid_metrics_model()
 
-# 1 column layout
-# https://dash-bootstrap-components.opensource.faculty.ai/l/components/layout
-# column1 = dbc.Col(
-#     [
-#         dcc.Markdown(
-#             """
-        
-#             ## API call done!
-
-
-#             """
-#         ),
-
-#     ],
-# )
-
-# layout = dbc.Row([column1])

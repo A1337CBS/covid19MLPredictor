@@ -8,11 +8,10 @@ from dash.dependencies import Input, Output
 # Imports from this application
 from app import app
 
-# 2 column layout. 1st column width = 4/12
+# 1 column layout. 1st column width = 6/12
 # https://dash-bootstrap-components.opensource.faculty.ai/l/components/layout
 
-column2 = dbc.Row([ 
-        dbc.Col(
+column1 = dbc.Col(
         [
             #html.Img(src="../data/model.png"),
             dcc.Markdown(
@@ -47,9 +46,8 @@ column2 = dbc.Row([
             ),
             html.Br(), 
         ],
-        md=4, width=10), 
-    ], align="center", justify="center")
+        md=6)
 
 
 
-layout = dbc.Row([column2], className='mt-4', align="center", justify="center")
+layout = dbc.Row([column1], className='mt-4', justify="center")
