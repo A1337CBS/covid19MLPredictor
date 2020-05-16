@@ -1,4 +1,4 @@
-# Framework, Libraries and Programming language used
+# Framework, Libraries used
 Made using Dash, Plotly and Python 
 
 # Instructions
