@@ -9,7 +9,7 @@ To execute the web app use the following command:
 
 
 # What is this?
-Source code for [covid19-qatar.herokuapp.com](covid19-qatar.herokuapp.com) web application to visualize results received from covid19_inference model for Qatar (See [here](https://github.com/shehel/covid19_inference)
+Source code for [covid19-qatar.herokuapp.com](covid19-qatar.herokuapp.com) web application to visualize results received from covid19_inference model for Qatar (See [here](https://github.com/shehel/covid19_inference) )
 
 
 # Contributing
