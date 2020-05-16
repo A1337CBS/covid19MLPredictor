@@ -55,21 +55,4 @@ column2 = dbc.Row([
         )
     ], justify="center")
 
-column3 = dbc.Col(
-    [
-            dcc.Markdown(
-            """
-        
-            ## Contributors
-
-            Shehel Yoosuf  
-            Ahmed Aziz  
-              
-            For more info or feedback, email: shyoosuf@hbku.edu.qa
-            """
-        ),
-    ],
-    md=4,
-)
-
-layout = dbc.Row([column2, column3], className='mt-4', justify="center",)
+layout = dbc.Row([column1, column2], className='mt-4', justify="center",)
