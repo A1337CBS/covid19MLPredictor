@@ -1,4 +1,5 @@
-# Made using Dash, Plotly and Python 
+# Framework, Libraries and Programming language used
+Made using Dash, Plotly and Python 
 
 # Instructions
 To execute the web app use the following command:
