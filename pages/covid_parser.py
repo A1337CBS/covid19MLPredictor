@@ -21,8 +21,8 @@ def get_covid_metrics_model():
     start = 0
     #Number of row results to call from api
     numRows = 200
-    request.urlretrieve("https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/download/?format=csv&timezone=Asia/Baghdad&lang=en&use_labels_for_header=true&csv_separator=%3B", "data/covid_data.csv")
-    df = pd.read_csv('data/covid_data.csv', sep=';')
+    request.urlretrieve("https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/download/?format=csv&timezone=Asia/Baghdad&lang=en&use_labels_for_header=true&csv_separator=%2C", "data/covid_data.csv")
+    df = pd.read_csv('data/covid_data.csv', sep=',')
     df = df.fillna(0)
     for col in df.columns[1:]: 
         df[col]=df[col].astype(int)
