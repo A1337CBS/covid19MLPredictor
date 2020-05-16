@@ -612,7 +612,7 @@ column4 = dbc.Col(
 )
 
 layout = dbc.Container([
-            #html.H1("Covid19 Forecast - Qatar"),
+            html.P("Graphs best viewed in PC or landscape mode."),
             html.Hr(),
             dbc.Row([column1, column2],justify="center",),
             dbc.Row([column3, column4],justify="center",)
