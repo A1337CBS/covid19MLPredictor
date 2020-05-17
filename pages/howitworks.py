@@ -24,7 +24,7 @@ column1 = dbc.Col(
                 are done for Qatar by looking at daily confirmed cases. 
                 The SIR model is extended to account for time delay of reporting, weekend effects and, change in infection transmission rates through government interventions and other major events.
                 Although a significant part of the infected people do not get tested or reported because say, they are asymptomatic or only exhibit mild symptoms, this must be
-                modelled because the number of daily cases put out by MoPH only account for those people that are tested and confirmed positive (see [Rizzo et. al.](https://covid-research.qcri.org/seir/SEIR_Autograd.pdf)).  
+                modelled because the number of daily cases put out by MoPH only account for those people that are tested and confirmed positive (see [Rizzo et. al. (2020)](https://covid-research.qcri.org/seir/SEIR_Autograd.pdf)).  
 
                 The dataset used comes from the [Qatar Open Data Portal](https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/information/).
                 We are constantly working on improving the model with additional information and assumptions. Meanwhile, as the model produces coarse estimations based on a very simplified model and noisy response data, i.e., daily confirmed cases, it should be interpreted with the confidence intervals and there
