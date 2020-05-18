@@ -26,7 +26,7 @@ import dash_table
 # Imports from this application
 from app import app
 
-def get_covid_metrics():
+def get_covid_metrics(df=None):
     api_link = "https://www.data.gov.qa/api/records/1.0/search/?dataset=covid-19-cases-in-qatar&q=&rows=1&sort=date&facet=date"
     with request.urlopen(api_link) as response:
         if response.getcode() == 200:
@@ -34,12 +34,18 @@ def get_covid_metrics():
             data = json.loads(source)
             try:
                 covid_cases={}
-                covid_cases['new_cases']       = data['records'][0]['fields']['number_of_new_positive_cases_in_last_24_hrs']
-                covid_cases['new_deaths']       = data['records'][0]['fields']['number_of_new_deaths_in_last_24_hrs']
-                covid_cases['new_recovered']       = data['records'][0]['fields']['number_of_new_recovered_cases_in_last_24_hrs']
-                covid_cases['recovered_cases'] = data['records'][0]['fields']['total_number_of_recovered_cases_to_date']
-                covid_cases['active_cases']    = data['records'][0]['fields']['total_number_of_active_cases_undergoing_treatment_to_date']
-                covid_cases['death_cases']          = data['records'][0]['fields']['total_number_of_deaths_to_date']
+                # covid_cases['new_cases']       = data['records'][0]['fields']['number_of_new_positive_cases_in_last_24_hrs']
+                # covid_cases['new_deaths']       = data['records'][0]['fields']['number_of_new_deaths_in_last_24_hrs']
+                # covid_cases['new_recovered']       = data['records'][0]['fields']['number_of_new_recovered_cases_in_last_24_hrs']
+                # covid_cases['recovered_cases'] = data['records'][0]['fields']['total_number_of_recovered_cases_to_date']
+                # covid_cases['active_cases']    = data['records'][0]['fields']['total_number_of_active_cases_undergoing_treatment_to_date']
+                # covid_cases['death_cases']          = data['records'][0]['fields']['total_number_of_deaths_to_date']
+                covid_cases['new_cases']       = df['Number of New Positive Cases in Last 24 Hrs'].iloc[-1]
+                covid_cases['new_deaths']       = df['Number of New Deaths in Last 24 Hrs'].iloc[-1]
+                covid_cases['new_recovered']       = df['Number of New Recovered Cases in Last 24 Hrs'].iloc[-1]
+                covid_cases['recovered_cases'] = df['Total Number of Recovered Cases to Date'].iloc[-1]
+                covid_cases['active_cases']    = df['Total Number of Active Cases Undergoing Treatment to Date'].iloc[-1]
+                covid_cases['death_cases']          = df['Total Number of Deaths to Date'].iloc[-1]
                 return covid_cases
             except:
                 return {"new_cases":"NA",
@@ -379,7 +385,8 @@ date_begin_data = datetime.datetime(2020,3,3)
 # df_confirmed_new = jhu.get_new_confirmed(country='Qatar', begin_date=date_begin_data).iloc[-1]
 # df_totals = jhu.get_confirmed_deaths_recovered(country='Qatar', begin_date=date_begin_data).iloc[-1]
 #new_cases_obs = (df['confirmed'].values)
-covid_cases = get_covid_metrics()
+df = pd.read_csv('data/covid_data.csv')
+covid_cases = get_covid_metrics(df)
 
 filename = 'data/trace_new_cases.pkl'
 infile = open(filename,'rb')
@@ -387,7 +394,6 @@ trace = pickle.load(infile)
 infile.close()
 
 df4Table = pd.read_csv('data/model_output.csv')
-df = pd.read_csv('data/covid_data.csv')
 df4Table = df4Table.loc[(df4Table['DT'] >= "2020-05-07")]
 
 
