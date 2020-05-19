@@ -34,18 +34,18 @@ def get_covid_metrics_model():
 
   if not FileCheck("../data/covid_data.csv"):
     request.urlretrieve("https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/download/?format=csv&timezone=Asia/Baghdad&lang=en&use_labels_for_header=true&csv_separator=%2C", "../data/covid_data.csv")
-    df = pd.read_csv('../data/covid_data.csv', sep=',')
+    df = pd.read_csv('./data/covid_data.csv', sep=',')
     df = df.fillna(0)
     for col in df.columns[1:]: 
         df[col]=df[col].astype(int)
     df['Date'] =pd.to_datetime(df.Date)
     df = df.sort_values(by='Date')
     df = df.iloc[3:]
-    df.to_csv('../data/covid_data.csv', index=None)
+    df.to_csv('./data/covid_data.csv', index=None)
   else:
     print ("Exists")
     
-    df = pd.read_csv('../data/covid_data.csv')
+    df = pd.read_csv('./data/covid_data.csv')
     prev = list(df.iloc[-1])
     repeat = True
     while (repeat):
@@ -62,7 +62,7 @@ def get_covid_metrics_model():
       print (new_stats)
       
       # If new entry added, 
-      if prev[4] != new_stats[0]:
+      if prev[4] == new_stats[0]:
         # Wait 1 minutes before trying again
         time.sleep(60)
         continue    
@@ -76,7 +76,7 @@ def get_covid_metrics_model():
                           new_stats[6]-prev[7], new_stats[6], new_stats[-1]-prev[-1], 
                           new_stats[-1]]
         print ("Dataframe appended and written to disk.")
-        df.to_csv('../data/covid_data.csv', index=None)
+        df.to_csv('./data/covid_data.csv', index=None)
         repeat = False
       
 
