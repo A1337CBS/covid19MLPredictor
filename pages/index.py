@@ -149,6 +149,8 @@ def plot_cases(
         fig.add_trace(
             go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot", color="#f21146"), name='Fit with 95% CI') 
         )
+
+        #pdb.set_trace()
         fig.add_trace(go.Scatter(
             x=[mpl_dates[7], mpl_dates[15], mpl_dates[51], mpl_dates[54], mpl_dates[75]],
             y=[2000, 2000, 2000, 2000, 2000],
