@@ -10,6 +10,7 @@ import datetime
 
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
+from selenium import webdriver
 
 #Parser written to scrape data from moph and add it to dataset
 # %%
@@ -50,16 +51,30 @@ def get_covid_metrics_model():
     repeat = True
     while (repeat):
       # Scrape new stats from moph
-      req = Request('https://www.moph.gov.qa/english/Pages/Coronavirus2019.aspx', headers={'User-Agent': 'Mozilla/5.0'})
-      webpage = urlopen(req).read()
-      soup = BeautifulSoup(webpage)
+      req = ('https://covid19.moph.gov.qa/EN/Pages/default.aspx')
+      # webpage = urlopen(req).read()
+
       new_stats = []
-      for i in soup.find_all("h3", class_="my-2"):
-        try:
-            new_stats.append(int(i.find("strong").string))
-        except: 
-            new_stats.append(int(i.find("b").string))
-      print (new_stats)
+
+      driver = webdriver.PhantomJS()
+      driver.get(req)
+      new_stats.append(int(driver.find_element_by_id(id_='strgPeopleTested').text))
+      new_stats.append(int(driver.find_element_by_id(id_='strgPositiveCases').text))
+      new_stats.append(int(driver.find_element_by_id(id_='strgActiveCases').text))
+      new_stats.append(int(driver.find_element_by_id(id_='strgPositiveCases24Hrs').text))
+      new_stats.append(int(driver.find_element_by_id(id_='strgPeopleAcuteCare').text))
+      new_stats.append(int(driver.find_element_by_id(id_='strgPeopleinICU').text))
+      new_stats.append(int(driver.find_element_by_id(id_='strgRecoveredPatients').text))
+      new_stats.append(int(driver.find_element_by_id(id_='strgDeaths').text))
+      print(new_stats)
+     # soup = BeautifulSoup(webpage)
+      # for i in soup.find_all("h3", class_="my-2"):
+      #   try:
+      #       new_stats.append(int(i.find("strong").string))
+      #   except: 
+      #       new_stats.append(int(i.find("b").string))
+
+
       
       # If new entry added, 
       if prev[4] == new_stats[0]:

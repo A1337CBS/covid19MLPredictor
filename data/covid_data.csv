@@ -1,7 +1,4 @@
 Date,Number of New Positive Cases in Last 24 Hrs,Total Number of Positive Cases to Date,Number of New Tests in Last 24 Hrs,Total Number of Tests to Date,Total Number of Active Cases Undergoing Treatment to Date,Number of New Recovered Cases in Last 24 Hrs,Total Number of Recovered Cases to Date,Number of New Deaths in Last 24 Hrs,Total Number of Deaths to Date
-2020-03-03,1,8,0,0,8,0,0,0,0
-2020-03-04,0,8,0,0,8,0,0,0,0
-2020-03-05,0,8,0,0,8,0,0,0,0
 2020-03-06,3,11,0,0,11,0,0,0,0
 2020-03-07,1,12,0,0,12,0,0,0,0
 2020-03-08,3,15,0,0,15,0,0,0,0
@@ -76,3 +73,4 @@ Date,Number of New Positive Cases in Last 24 Hrs,Total Number of Positive Cases 
 2020-05-16,1547,30972,4531,152704,27169,242,3788,1,15
 2020-05-17,1632,32604,4866,157570,28219,582,4370,0,15
 2020-05-18,1365,33969,4125,161695,29055,529,4899,0,15
+2020-05-19,1637,35606,4487,166182,29957,735,5634,0,15
