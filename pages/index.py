@@ -26,7 +26,7 @@ import dash_table
 # Imports from this application
 from app import app
 
-def get_covid_metrics():
+def get_covid_metrics(df=None):
     api_link = "https://www.data.gov.qa/api/records/1.0/search/?dataset=covid-19-cases-in-qatar&q=&rows=1&sort=date&facet=date"
     with request.urlopen(api_link) as response:
         if response.getcode() == 200:
@@ -34,12 +34,18 @@ def get_covid_metrics():
             data = json.loads(source)
             try:
                 covid_cases={}
-                covid_cases['new_cases']       = data['records'][0]['fields']['number_of_new_positive_cases_in_last_24_hrs']
-                covid_cases['new_deaths']       = data['records'][0]['fields']['number_of_new_deaths_in_last_24_hrs']
-                covid_cases['new_recovered']       = data['records'][0]['fields']['number_of_new_recovered_cases_in_last_24_hrs']
-                covid_cases['recovered_cases'] = data['records'][0]['fields']['total_number_of_recovered_cases_to_date']
-                covid_cases['active_cases']    = data['records'][0]['fields']['total_number_of_active_cases_undergoing_treatment_to_date']
-                covid_cases['death_cases']          = data['records'][0]['fields']['total_number_of_deaths_to_date']
+                # covid_cases['new_cases']       = data['records'][0]['fields']['number_of_new_positive_cases_in_last_24_hrs']
+                # covid_cases['new_deaths']       = data['records'][0]['fields']['number_of_new_deaths_in_last_24_hrs']
+                # covid_cases['new_recovered']       = data['records'][0]['fields']['number_of_new_recovered_cases_in_last_24_hrs']
+                # covid_cases['recovered_cases'] = data['records'][0]['fields']['total_number_of_recovered_cases_to_date']
+                # covid_cases['active_cases']    = data['records'][0]['fields']['total_number_of_active_cases_undergoing_treatment_to_date']
+                # covid_cases['death_cases']          = data['records'][0]['fields']['total_number_of_deaths_to_date']
+                covid_cases['new_cases']       = df['Number of New Positive Cases in Last 24 Hrs'].iloc[-1]
+                covid_cases['new_deaths']       = df['Number of New Deaths in Last 24 Hrs'].iloc[-1]
+                covid_cases['new_recovered']       = df['Number of New Recovered Cases in Last 24 Hrs'].iloc[-1]
+                covid_cases['recovered_cases'] = df['Total Number of Recovered Cases to Date'].iloc[-1]
+                covid_cases['active_cases']    = df['Total Number of Active Cases Undergoing Treatment to Date'].iloc[-1]
+                covid_cases['death_cases']          = df['Total Number of Deaths to Date'].iloc[-1]
                 return covid_cases
             except:
                 return {"new_cases":"NA",
@@ -143,9 +149,11 @@ def plot_cases(
         fig.add_trace(
             go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot", color="#f21146"), name='Fit with 95% CI') 
         )
+
+        #pdb.set_trace()
         fig.add_trace(go.Scatter(
-            x=[mpl_dates[7], mpl_dates[15], mpl_dates[51], mpl_dates[54]],
-            y=[2000, 2000, 2000, 2000],
+            x=[mpl_dates[7], mpl_dates[15], mpl_dates[51], mpl_dates[54], mpl_dates[75]],
+            y=[2000, 2000, 2000, 2000, 2000],
             mode="markers",
             marker_symbol="cross-dot",
             marker_line_color="#6ab9f2",
@@ -153,7 +161,7 @@ def plot_cases(
             marker_size=12,
             marker_line_width=2,
             name="Events and Interventions",
-            text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)"],
+            text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)", "Masks (Public)"],
             textposition="top center"
         ))
         
@@ -314,6 +322,10 @@ def plot_cases(
             line=dict(dash="dashdot",color='#abbd07'), name='Masks Made Compulsory')
         )
         fig.add_trace(
+            go.Scatter(x=[mpl_dates[91],mpl_dates[91] ], y=[minVertY, maxVertY], mode='lines', 
+            line=dict(dash="dashdot",color='#E7F94E'), name='Masks Made Compulsory')
+        )
+        fig.add_trace(
             go.Scatter(x=[mpl_dates[0],mpl_dates[-1] ], y=[0, 0], mode='lines', 
             line=dict(dash="dot",color='black'), name='Critical Point')
         )
@@ -379,7 +391,8 @@ date_begin_data = datetime.datetime(2020,3,3)
 # df_confirmed_new = jhu.get_new_confirmed(country='Qatar', begin_date=date_begin_data).iloc[-1]
 # df_totals = jhu.get_confirmed_deaths_recovered(country='Qatar', begin_date=date_begin_data).iloc[-1]
 #new_cases_obs = (df['confirmed'].values)
-covid_cases = get_covid_metrics()
+df = pd.read_csv('data/covid_data.csv')
+covid_cases = get_covid_metrics(df)
 
 filename = 'data/trace_new_cases.pkl'
 infile = open(filename,'rb')
@@ -387,7 +400,6 @@ trace = pickle.load(infile)
 infile.close()
 
 df4Table = pd.read_csv('data/model_output.csv')
-df = pd.read_csv('data/covid_data.csv')
 df4Table = df4Table.loc[(df4Table['DT'] >= "2020-05-07")]
 
 
@@ -587,8 +599,9 @@ column4 = dbc.Col(
                 html.Li("10 March 2020: Universities and schools close until further notice."),
                 html.Li("18 March 2020: Border restriction including restrictions on inbound passengers."),
                 html.Li("23 April 2020: Beginning of Ramadan."),
-                html.Li("26 April 2020: Masks made compulsory for all shoppers, service sector and construction sector employees.")]
-            ),
+                html.Li("26 April 2020: Masks made compulsory for all shoppers, service sector and construction sector employees."),
+                html.Li("17 May 2020: Masks made compulsory for all individuals going out in public.")
+            ]),
             html.H5("""
             When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic. 
             Our preliminary models show Qatar is close to achieving this. #StayHome
