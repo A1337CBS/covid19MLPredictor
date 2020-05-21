@@ -572,11 +572,27 @@ def set_rate_graph(selected_rate):
     dash.dependencies.Output('rate_header', 'children'),
     [dash.dependencies.Input('rate_dropdown', 'value')])
 def set_rate_header(selected_rate):
+    if selected_rate is None:
+        selected_rate = "Effective Growth Rate"
     return selected_rate+" - Qatar"
 
 column4 = dbc.Col(
     [
-            html.Hr(),
+            
+    ],
+    id="col4",
+    md=6,
+
+)
+
+
+@app.callback(
+    dash.dependencies.Output('col4', 'children'),
+    [dash.dependencies.Input('rate_dropdown', 'value')])
+def set_col4_children(selected_rate):
+    if selected_rate=="Reproduction Rate":
+        pass
+    return  (html.Hr(),
             html.H3(" "),
             html.P("""
             The model uses a time-dependent transmission/spreading rate following the assumption that a signicant change in transmission rate 
@@ -592,16 +608,7 @@ column4 = dbc.Col(
             When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic. 
             Our preliminary models show Qatar is close to achieving this. #StayHome
             """)
-    ],
-    md=6,
-
-)
-
-# @app.callback(
-#     dash.dependencies.Output('rate_header', 'children'),
-#     [dash.dependencies.Input('rate_dropdown', 'value')])
-# def set_rate_header(selected_rate):
-#     return selected_rate+" - Qatar"
+    )
 
 layout = dbc.Container([
             html.P("Graphs best viewed in PC or landscape mode."),
