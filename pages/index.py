@@ -547,13 +547,13 @@ column3 = dbc.Col(
         html.Div([
             dcc.Dropdown(
                 id='rate_dropdown',
-                options=[ {'label':i, 'value':i}  for i in ['Effective Growth Rate', 'Reproduction Rate'] ],
-                value = 'Effective Growth Rate'
+                options=[ {'label':i, 'value':i}  for i in ['Reproduction Rate', 'Effective Growth Rate'] ],
+                value = 'Reproduction Rate'
                 ),
             ],style={'width': '49%',  'display': 'inline-block'}, className="justify-content-end"),
         dcc.Graph(
             id='small_graph',
-            figure=fig_growth_rate,
+            #figure=fig_growth_rate,
         )
     ],
     md=6,
@@ -590,9 +590,7 @@ column4 = dbc.Col(
     dash.dependencies.Output('col4', 'children'),
     [dash.dependencies.Input('rate_dropdown', 'value')])
 def set_col4_children(selected_rate):
-    if selected_rate=="Reproduction Rate":
-        pass
-    return  (html.Hr(),
+    col4_children = [html.Hr(),
             html.H3(" "),
             html.P("""
             The model uses a time-dependent transmission/spreading rate following the assumption that a signicant change in transmission rate 
@@ -608,7 +606,27 @@ def set_col4_children(selected_rate):
             When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic. 
             Our preliminary models show Qatar is close to achieving this. #StayHome
             """)
-    )
+            ]
+    if selected_rate=="Reproduction Rate":
+        col4_children = [html.Hr(),
+            html.H3(" "),
+            html.P("""
+            The model uses a time-dependent transmission/spreading rate following the assumption that a signicant change in transmission rate 
+            may occur at certain points over the course of a pandemic. This is modelled though change points which corresponds to Government policy
+            interventions and events that could affect the transmission rate. The current model includes the following change points"""),
+            html.Ol([
+                html.Li("10 March 2020: Universities and schools close until further notice."),
+                html.Li("18 March 2020: Border restriction including restrictions on inbound passengers."),
+                html.Li("23 April 2020: Beginning of Ramadan."),
+                html.Li("26 April 2020: Masks made compulsory for all shoppers, service sector and construction sector employees.")]
+            ),
+            html.H5("""
+            When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic. 
+            Our preliminary models show Qatar is close to achieving this. #StayHome
+            """)
+            ]
+    return col4_children
+    
 
 layout = dbc.Container([
             html.P("Graphs best viewed in PC or landscape mode."),
