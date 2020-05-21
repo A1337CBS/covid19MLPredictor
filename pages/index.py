@@ -409,11 +409,41 @@ fig_growth_rate = plot_cases(
 )
 
 def fig_reprod():
-    result = pd.read_csv('data/realtime_rt.csv')
-    fig = px.scatter(result,x=result.index, y="ML", color="ML",title="Reproduction rate over time",
-                    range_color=[0,4], color_continuous_scale='Bluered')
-    return fig
 
+    fig = go.Figure()
+    result = pd.read_csv('data/realtime_rt.csv')
+    result = result.loc[5:]
+    fig.add_trace(
+                go.Scatter(x=result["date"], y=result["High_90"].values, fill='none', line=dict(width=0.8, color=' #D2D7D3'), fillcolor=' #D2D7D3',
+                            mode= 'lines',name="75%-top", opacity=0.2, showlegend=False)
+            )
+    fig.add_trace(
+                go.Scatter(x=result["date"], y=result["Low_90"].values, fill='tonextx', line=dict(width=0.8, color='#D2D7D3'), fillcolor = '#D2D7D3',
+                            mode= 'lines',name="75%-bottom", opacity=0.2, showlegend=False))
+    fig.add_trace(go.Scatter(
+        x=result["date"],
+        y=result["ML"].values,
+        marker=dict(
+            size=4, 
+            cmax=4,
+            cmin=0,
+            color=result["ML"].values,
+            colorbar=dict(
+                title="R_t",
+            ),
+            colorscale="Reds"
+        ),
+        showlegend=False,
+        mode="markers"))
+    fig.add_trace(
+            go.Scatter(x=[result["date"].iloc[0],result["date"].iloc[-1]], y=[1, 1], mode='lines', 
+            line=dict(dash="dot",color='black'), name='Critical Point', showlegend=False)
+        )
+    fig.update_layout(
+                template = 'ggplot2',
+                xaxis_title="Date",
+                yaxis_title="Reproductive Rate R_t")
+    return fig
 # 2 column layout. 1st column width = 4/12
 # https://dash-bootstrap-components.opensource.faculty.ai/l/components/layout
 column1 = dbc.Jumbotron([ 
@@ -611,25 +641,24 @@ def set_col4_children(selected_rate):
         col4_children = [html.Hr(),
             html.H3(" "),
             html.P("""
-            The model uses a time-dependent transmission/spreading rate following the assumption that a signicant change in transmission rate 
-            may occur at certain points over the course of a pandemic. This is modelled though change points which corresponds to Government policy
-            interventions and events that could affect the transmission rate. The current model includes the following change points"""),
-            html.Ol([
-                html.Li("10 March 2020: Universities and schools close until further notice."),
-                html.Li("18 March 2020: Border restriction including restrictions on inbound passengers."),
-                html.Li("23 April 2020: Beginning of Ramadan."),
-                html.Li("26 April 2020: Masks made compulsory for all shoppers, service sector and construction sector employees.")]
-            ),
-            html.H5("""
-            When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic. 
-            Our preliminary models show Qatar is close to achieving this. #StayHome
+            The effective reproductive number provides a one number summary for the state of an epidemic at a given time. 
+            It is defined as the number of people who become infected per infectious person at a given time. The higher the 
+            reproductive number, the more it is spreading. We want this number to be close to 0 and definitely under 1. Beyond 1, 
+            the viral transmission is in a growth phase and is infecting more and more people everyday."""),
+            html.P(""" 
+            Knowing the current reproductive number is essential as it is a good indicator of where we stand in terms of 
+            eradicating the pandemic. The graph on the left is derived from a Bayesian approach to estimate and track the reproductive number 
+            on a daily basis. Use the drop-down box to see the result of estimating a similar statistic by keeping the reproductive number
+            static given a change point. Whereas the graph to the left is mostly for monitoring the present, the other graph
+            derived from the SIR model is for retrospection into the interventions and providing an estimate of the growth of the pandemic
+            in the future.   
             """)
             ]
     return col4_children
     
 
 layout = dbc.Container([
-            html.P("Graphs best viewed in PC or landscape mode."),
+            html.P("Graphs are interactive and are best viewed in PC or landscape mode."),
             html.Hr(),
             dbc.Row([column1, column2],justify="center",),
             dbc.Row([column3, column4],justify="center",)

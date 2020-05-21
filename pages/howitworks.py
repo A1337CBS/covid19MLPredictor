@@ -26,11 +26,15 @@ column1 = dbc.Col(
                 Although a significant part of the infected people do not get tested or reported because say, they are asymptomatic or only exhibit mild symptoms, this must be
                 modelled because the number of daily cases put out by MoPH only account for those people that are tested and confirmed positive (see [Rizzo et. al. (2020)](https://covid-research.qcri.org/seir/SEIR_Autograd.pdf)).  
 
+                The Reproductive number is estimated using the method proposed by [Bettencourt & Ribeiro (2008)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0002185)
+                and implementation by [Kevin Systrom](https://github.com/k-sys/covid-19/blob/master/Realtime%20R0.ipynb). 
+
                 The dataset used comes from the [Qatar Open Data Portal](https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/information/).
                 We are constantly working on improving the model with additional information and assumptions. Meanwhile, as the model produces coarse estimations based on a very simplified model and noisy response data, i.e., daily confirmed cases, it should be interpreted with the confidence intervals and there
                 is also no guarantee the estimations will materialize.      
 
                 ## Updates
+                - 21/5/2020 Added realtime estimation for reproductive number. 
                 - 18/5/2020 Added changepoint for the 17th May ruling on masks being made mandatory.
                 - 16/5/2020 Added a tested compartment in the SIR model. It was found that untested infected people make a difference to the SIR model.
                 - 15/5/2020 Changed data source from [John Hopkins University repo](https://github.com/CSSEGISandData/COVID-19) to 
