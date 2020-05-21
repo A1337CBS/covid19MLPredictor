@@ -350,6 +350,9 @@ def plot_cases(
 
 date_begin_data = datetime.datetime(2020,3,3)
 
+result = pd.read_csv('data/realtime_rt.csv')
+result = result.loc[5:]
+
 filename = 'data/trace_new_cases.pkl'
 infile = open(filename,'rb')
 trace = pickle.load(infile)
@@ -358,8 +361,7 @@ infile.close()
 df4Table = pd.read_csv('data/model_output.csv')
 df = pd.read_csv('data/covid_data.csv')
 covid_cases = get_covid_metrics(df)
-df4Table = df4Table.loc[(df4Table['DT'] >= "2020-05-07")]
-
+df4Table = df4Table.iloc[-15:]
 
 df4Table.replace(0, np.nan, inplace=True)
 df4Table.columns = ['Date', 'Observed', 'Model']
@@ -400,11 +402,9 @@ fig_growth_rate = plot_cases(
     second_graph=True
 )
 
-def fig_reprod():
+def fig_reprod(result):
 
     fig = go.Figure()
-    result = pd.read_csv('data/realtime_rt.csv')
-    result = result.loc[5:]
     fig.add_trace(
                 go.Scatter(x=result["date"], y=result["High_90"].values, fill='none', line=dict(width=0.8, color=' #D2D7D3'), fillcolor=' #D2D7D3',
                             mode= 'lines',name="75%-top", opacity=0.2, showlegend=False)
@@ -417,7 +417,7 @@ def fig_reprod():
         y=result["ML"].values,
         marker=dict(
             size=4, 
-            cmax=4,
+            cmax=3,
             cmin=0,
             color=result["ML"].values,
             colorbar=dict(
@@ -587,7 +587,7 @@ column3 = dbc.Col(
     [dash.dependencies.Input('rate_dropdown', 'value')])
 def set_rate_graph(selected_rate):
     if selected_rate=="Reproduction Rate":
-        return fig_reprod()
+        return fig_reprod(result)
     return fig_growth_rate
 
 @app.callback(
