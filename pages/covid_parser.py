@@ -9,15 +9,10 @@ import os
 import time
 import datetime
 
-<<<<<<< HEAD
 
-||||||| merged common ancestors
-#Parser written to get covid data from data.gov.qa
-=======
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 from selenium import webdriver
->>>>>>> 6435f5358f46d15fe651cc1ed2b6660d2b72fee7
 
 #Parser written to scrape data from moph and add it to dataset
 # %%
@@ -29,7 +24,6 @@ def FileCheck(fn):
       print ("Error: File does not appear to exist.")
       return False
 
-<<<<<<< HEAD
 #Parser to get latest metrics as soon as they are published
 def get_covid_metrics_parser():
   user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
@@ -123,8 +117,6 @@ def get_covid_metrics_parser():
 
 
 #Parser written to get covid data from data.gov.qa
-||||||| merged common ancestors
-=======
 # %% 
 '''
 The order of retrieval of data from MoPH is 
@@ -134,7 +126,6 @@ currently under acute care, currently in icu,
 recovered patients, deaths. This is the order 
 data is stored in new_stats
 '''
->>>>>>> 6435f5358f46d15fe651cc1ed2b6660d2b72fee7
 def get_covid_metrics_model():
 
   if not FileCheck("../data/covid_data.csv"):
