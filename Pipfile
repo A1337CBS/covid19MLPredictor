@@ -13,6 +13,7 @@ plotly = "*"
 pandas = "*"
 matplotlib = "*"
 pymc3 = "*"
+beautifulsoup4 = "*"
 
 [requires]
 python_version = "3"
