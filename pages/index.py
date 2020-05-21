@@ -31,29 +31,21 @@ from app import app
 ######################################
 
 #Get Qatar related covid data
-def get_covid_metrics():
-    api_link = "https://www.data.gov.qa/api/records/1.0/search/?dataset=covid-19-cases-in-qatar&q=&rows=1&sort=date&facet=date"
-    with request.urlopen(api_link) as response:
-        if response.getcode() == 200:
-            source = response.read()
-            data = json.loads(source)
-            try:
-                covid_cases={}
-                covid_cases['new_cases']       = data['records'][0]['fields']['number_of_new_positive_cases_in_last_24_hrs']
-                covid_cases['new_deaths']       = data['records'][0]['fields']['number_of_new_deaths_in_last_24_hrs']
-                covid_cases['new_recovered']       = data['records'][0]['fields']['number_of_new_recovered_cases_in_last_24_hrs']
-                covid_cases['recovered_cases'] = data['records'][0]['fields']['total_number_of_recovered_cases_to_date']
-                covid_cases['active_cases']    = data['records'][0]['fields']['total_number_of_active_cases_undergoing_treatment_to_date']
-                covid_cases['death_cases']          = data['records'][0]['fields']['total_number_of_deaths_to_date']
-                return covid_cases
-            except:
-                return {"new_cases":"NA",
-                        "recovered_cases":"NA",
-                        "active_cases":"NA",
-                        "death_cases":"NA"}
-
-        else:
-            print('An error occurred while attempting to retrieve data from the API.')
+def get_covid_metrics(df):
+    try:
+        covid_cases={}
+        covid_cases['new_cases']       = df['Number of New Positive Cases in Last 24 Hrs'].iloc[-1]
+        covid_cases['new_deaths']       = df['Number of New Deaths in Last 24 Hrs'].iloc[-1]
+        covid_cases['new_recovered']       =df['Number of New Recovered Cases in Last 24 Hrs'].iloc[-1]
+        covid_cases['recovered_cases'] =df['Total Number of Recovered Cases to Date'].iloc[-1]
+        covid_cases['active_cases']    =df['Total Number of Active Cases Undergoing Treatment to Date'].iloc[-1]
+        covid_cases['death_cases']     =     df['Total Number of Deaths to Date'].iloc[-1]
+        return covid_cases
+    except:
+        return {"new_cases":"NA",
+                "recovered_cases":"NA",
+                "active_cases":"NA",
+                "death_cases":"NA"}
 
 #Main function for plotting graphs
 def plot_cases(
@@ -357,7 +349,6 @@ def plot_cases(
 
 
 date_begin_data = datetime.datetime(2020,3,3)
-covid_cases = get_covid_metrics()
 
 filename = 'data/trace_new_cases.pkl'
 infile = open(filename,'rb')
@@ -366,6 +357,7 @@ infile.close()
 
 df4Table = pd.read_csv('data/model_output.csv')
 df = pd.read_csv('data/covid_data.csv')
+covid_cases = get_covid_metrics(df)
 df4Table = df4Table.loc[(df4Table['DT'] >= "2020-05-07")]
 
 
