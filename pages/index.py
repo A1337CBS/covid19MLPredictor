@@ -6,7 +6,7 @@ import numpy as np
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
+
 import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
@@ -26,7 +26,12 @@ import dash_table
 # Imports from this application
 from app import app
 
-def get_covid_metrics(df=None):
+######################################
+#############FUNCTIONS################
+######################################
+
+#Get Qatar related covid data
+def get_covid_metrics():
     api_link = "https://www.data.gov.qa/api/records/1.0/search/?dataset=covid-19-cases-in-qatar&q=&rows=1&sort=date&facet=date"
     with request.urlopen(api_link) as response:
         if response.getcode() == 200:
@@ -34,18 +39,12 @@ def get_covid_metrics(df=None):
             data = json.loads(source)
             try:
                 covid_cases={}
-                # covid_cases['new_cases']       = data['records'][0]['fields']['number_of_new_positive_cases_in_last_24_hrs']
-                # covid_cases['new_deaths']       = data['records'][0]['fields']['number_of_new_deaths_in_last_24_hrs']
-                # covid_cases['new_recovered']       = data['records'][0]['fields']['number_of_new_recovered_cases_in_last_24_hrs']
-                # covid_cases['recovered_cases'] = data['records'][0]['fields']['total_number_of_recovered_cases_to_date']
-                # covid_cases['active_cases']    = data['records'][0]['fields']['total_number_of_active_cases_undergoing_treatment_to_date']
-                # covid_cases['death_cases']          = data['records'][0]['fields']['total_number_of_deaths_to_date']
-                covid_cases['new_cases']       = df['Number of New Positive Cases in Last 24 Hrs'].iloc[-1]
-                covid_cases['new_deaths']       = df['Number of New Deaths in Last 24 Hrs'].iloc[-1]
-                covid_cases['new_recovered']       = df['Number of New Recovered Cases in Last 24 Hrs'].iloc[-1]
-                covid_cases['recovered_cases'] = df['Total Number of Recovered Cases to Date'].iloc[-1]
-                covid_cases['active_cases']    = df['Total Number of Active Cases Undergoing Treatment to Date'].iloc[-1]
-                covid_cases['death_cases']          = df['Total Number of Deaths to Date'].iloc[-1]
+                covid_cases['new_cases']       = data['records'][0]['fields']['number_of_new_positive_cases_in_last_24_hrs']
+                covid_cases['new_deaths']       = data['records'][0]['fields']['number_of_new_deaths_in_last_24_hrs']
+                covid_cases['new_recovered']       = data['records'][0]['fields']['number_of_new_recovered_cases_in_last_24_hrs']
+                covid_cases['recovered_cases'] = data['records'][0]['fields']['total_number_of_recovered_cases_to_date']
+                covid_cases['active_cases']    = data['records'][0]['fields']['total_number_of_active_cases_undergoing_treatment_to_date']
+                covid_cases['death_cases']          = data['records'][0]['fields']['total_number_of_deaths_to_date']
                 return covid_cases
             except:
                 return {"new_cases":"NA",
@@ -56,7 +55,7 @@ def get_covid_metrics(df=None):
         else:
             print('An error occurred while attempting to retrieve data from the API.')
 
-
+#Main function for plotting graphs
 def plot_cases(
     trace,
     df,
@@ -149,11 +148,9 @@ def plot_cases(
         fig.add_trace(
             go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot", color="#f21146"), name='Fit with 95% CI') 
         )
-
-        #pdb.set_trace()
         fig.add_trace(go.Scatter(
-            x=[mpl_dates[7], mpl_dates[15], mpl_dates[51], mpl_dates[54], mpl_dates[75]],
-            y=[2000, 2000, 2000, 2000, 2000],
+            x=[mpl_dates[7], mpl_dates[15], mpl_dates[51], mpl_dates[54]],
+            y=[2000, 2000, 2000, 2000],
             mode="markers",
             marker_symbol="cross-dot",
             marker_line_color="#6ab9f2",
@@ -161,7 +158,7 @@ def plot_cases(
             marker_size=12,
             marker_line_width=2,
             name="Events and Interventions",
-            text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)", "Masks (Public)"],
+            text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)"],
             textposition="top center"
         ))
         
@@ -209,31 +206,7 @@ def plot_cases(
             go.Scatter(x=mpl_dates_fut, y=median, mode='lines', line=dict(color="#f21146"), name='Forecast with 75% and 95% CI') 
         )
 
-
-        
-
-        #Add markers for 'school shutdown', 'airport shutdown', 'ramadan and mask'
-        # fig.add_annotation(
-        #     x=mpl_dates[7],
-        #     y=50,
-        #     text="School Shutdown")
-        # fig.add_annotation(
-        #             x=mpl_dates[15],
-        #            y=250,
-        #             text="Border Shutdown/Contact Restriction")
-        # fig.add_annotation(
-        #             x=mpl_dates[51],
-        #             y=20,
-        #             text="Ramadan and Mandatory Masks")
-        # fig.update_annotations(dict(
-        #             xref="x",
-        #             yref="y",
-        #             showarrow=True,
-        #             arrowhead=7,
-        #             ax=0,
-        #             ay=-20
-        # ))
-
+        #Define X and Y Axes text add and range
         fig.update_layout(
         yaxis=dict(range=[0,3500]),
         xaxis=dict(range=[mpl_dates[0],mpl_dates_fut[-1] ]),
@@ -267,9 +240,8 @@ def plot_cases(
         )
         
 
-    
+    #Plot growth rate Graph
     if(second_graph == True):
-        #Plot growth rate Graph
         filename = 'data/trace_lambda.pkl'
         infile = open(filename,'rb')
         trace_lambda_t = pickle.load(infile)
@@ -284,7 +256,7 @@ def plot_cases(
         μ = trace_mu[:, None]
         mpl_dates = conv_time_to_mpl_dates(time) + diff_data_sim + num_days_data
 
-        # ax.plot(mpl_dates, np.median(lambda_t - μ, axis=0), color=colors[1], linewidth=2)
+
         mpl_dates = matplotlib.dates.num2date(mpl_dates)
 
         fig.add_trace(
@@ -320,10 +292,6 @@ def plot_cases(
         fig.add_trace(
             go.Scatter(x=[mpl_dates[70],mpl_dates[70] ], y=[minVertY, maxVertY], mode='lines', 
             line=dict(dash="dashdot",color='#abbd07'), name='Masks Made Compulsory')
-        )
-        fig.add_trace(
-            go.Scatter(x=[mpl_dates[91],mpl_dates[91] ], y=[minVertY, maxVertY], mode='lines', 
-            line=dict(dash="dashdot",color='#E7F94E'), name='Masks Made Compulsory')
         )
         fig.add_trace(
             go.Scatter(x=[mpl_dates[0],mpl_dates[-1] ], y=[0, 0], mode='lines', 
@@ -363,7 +331,7 @@ def plot_cases(
             # height=550,
             # width=1137
         )
-
+    #Stop Plotting growth rate Graph
 
     #True new_cases_observed Data trace
     if(second_graph == False):
@@ -382,17 +350,14 @@ def plot_cases(
     fig.update_yaxes(automargin=True)
     return fig
     
-#jhu = JHU(True)
-#It is important to download the dataset!
-#One could also parse true to the constructor of the class to force an auto download
-#jhu.download_all_available_data(); 
+
+######################################
+#############VARIABLES################
+######################################
+
 
 date_begin_data = datetime.datetime(2020,3,3)
-# df_confirmed_new = jhu.get_new_confirmed(country='Qatar', begin_date=date_begin_data).iloc[-1]
-# df_totals = jhu.get_confirmed_deaths_recovered(country='Qatar', begin_date=date_begin_data).iloc[-1]
-#new_cases_obs = (df['confirmed'].values)
-df = pd.read_csv('data/covid_data.csv')
-covid_cases = get_covid_metrics(df)
+covid_cases = get_covid_metrics()
 
 filename = 'data/trace_new_cases.pkl'
 infile = open(filename,'rb')
@@ -400,6 +365,7 @@ trace = pickle.load(infile)
 infile.close()
 
 df4Table = pd.read_csv('data/model_output.csv')
+df = pd.read_csv('data/covid_data.csv')
 df4Table = df4Table.loc[(df4Table['DT'] >= "2020-05-07")]
 
 
@@ -442,6 +408,12 @@ fig_growth_rate = plot_cases(
     second_graph=True
 )
 
+def fig_reprod():
+    result = pd.read_csv('data/realtime_rt.csv')
+    fig = px.scatter(result,x=result.index, y="ML", color="ML",title="Reproduction rate over time",
+                    range_color=[0,4], color_continuous_scale='Bluered')
+    return fig
+
 # 2 column layout. 1st column width = 4/12
 # https://dash-bootstrap-components.opensource.faculty.ai/l/components/layout
 column1 = dbc.Jumbotron([ 
@@ -469,16 +441,10 @@ column1 = dbc.Jumbotron([
                     color="light",
                 )
     ],
-    #md=4,
-    #width=4,
-    #className="pretty_container four columns",
     )], 
     fluid=True,
     )
 
-# gapminder = px.data.gapminder()
-# fig = px.scatter(gapminder.query("year==2007"), x="gdpPercap", y="lifeExp", size="pop", color="continent",
-#            hover_name="country", log_x=True, size_max=60)
 
 
 column2 = dbc.Col(
@@ -572,24 +538,45 @@ column2 = dbc.Col(
     md=8,
 )
 
+#available_rates = ['Effective Growth Rate', 'Reproduction Rate']
 column3 = dbc.Col(
     [
         
         html.Hr(),
-        html.H3("Effective Growth Rate - Qatar"),
+        html.H3(id='rate_header', children=["Effective Growth Rate - Qatar"]),
+        html.Div([
+            dcc.Dropdown(
+                id='rate_dropdown',
+                options=[ {'label':i, 'value':i}  for i in ['Effective Growth Rate', 'Reproduction Rate'] ],
+                value = 'Effective Growth Rate'
+                ),
+            ],style={'width': '49%',  'display': 'inline-block'}, className="justify-content-end"),
         dcc.Graph(
             id='small_graph',
             figure=fig_growth_rate,
         )
     ],
     md=6,
-    #width=4,
 )
+
+
+@app.callback(
+    dash.dependencies.Output('small_graph', 'figure'),
+    [dash.dependencies.Input('rate_dropdown', 'value')])
+def set_rate_graph(selected_rate):
+    if selected_rate=="Reproduction Rate":
+        return fig_reprod()
+    return fig_growth_rate
+
+@app.callback(
+    dash.dependencies.Output('rate_header', 'children'),
+    [dash.dependencies.Input('rate_dropdown', 'value')])
+def set_rate_header(selected_rate):
+    return selected_rate+" - Qatar"
 
 column4 = dbc.Col(
     [
-        # html.H1("Covid19 Forecast - Qatar"),
-             html.Hr(),
+            html.Hr(),
             html.H3(" "),
             html.P("""
             The model uses a time-dependent transmission/spreading rate following the assumption that a signicant change in transmission rate 
@@ -599,30 +586,22 @@ column4 = dbc.Col(
                 html.Li("10 March 2020: Universities and schools close until further notice."),
                 html.Li("18 March 2020: Border restriction including restrictions on inbound passengers."),
                 html.Li("23 April 2020: Beginning of Ramadan."),
-                html.Li("26 April 2020: Masks made compulsory for all shoppers, service sector and construction sector employees."),
-                html.Li("17 May 2020: Masks made compulsory for all individuals going out in public.")
-            ]),
+                html.Li("26 April 2020: Masks made compulsory for all shoppers, service sector and construction sector employees.")]
+            ),
             html.H5("""
             When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic. 
             Our preliminary models show Qatar is close to achieving this. #StayHome
             """)
-        # dcc.Graph(
-        #     id='main_graph',
-        #     figure={
-        #         'data': [
-        #             {'x': [1, 2, 3, 4, 5], 'y': [9, 6, 2, 1, 5], 'type': 'line', 'name': 'First'},
-        #             {'x': [1, 2, 3, 4, 5], 'y': [8, 7, 2, 7, 3], 'type': 'line', 'name': 'Second'},
-        #         ],
-        #         'layout': {
-        #             'title': 'Basic Forecast'
-        #         }
-        #     }
-        # )
     ],
     md=6,
-    #width=4,
 
 )
+
+# @app.callback(
+#     dash.dependencies.Output('rate_header', 'children'),
+#     [dash.dependencies.Input('rate_dropdown', 'value')])
+# def set_rate_header(selected_rate):
+#     return selected_rate+" - Qatar"
 
 layout = dbc.Container([
             html.P("Graphs best viewed in PC or landscape mode."),
