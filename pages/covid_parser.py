@@ -32,7 +32,8 @@ def get_covid_metrics_parser():
   required_elem = {'Total Number of People Tested':0, }
   #get already saved data
   df = pd.read_csv('data/covid_data.csv', sep=',')
-  df_max_date = datetime.strptime(df.Date.max(), '%Y-%m-%d')
+  df_max_date = df.Data.iloc[-1]#datetime.strptime(df.Date.max(), '%Y-%m-%d')
+  print (df_max_date)
   covid_cases={}
   # covid_cases['new_cases']         = "" 
   # covid_cases['new_deaths']        = ""
