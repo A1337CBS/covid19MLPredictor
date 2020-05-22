@@ -141,8 +141,8 @@ def plot_cases(
             go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot", color="#f21146"), name='Fit with 95% CI') 
         )
         fig.add_trace(go.Scatter(
-            x=[mpl_dates[7], mpl_dates[15], mpl_dates[51], mpl_dates[54]],
-            y=[2000, 2000, 2000, 2000],
+            x=[mpl_dates[7], mpl_dates[15], mpl_dates[51], mpl_dates[54], mpl_dates[75]],
+            y=[2000, 2000, 2000, 2000, 2000],
             mode="markers",
             marker_symbol="cross-dot",
             marker_line_color="#6ab9f2",
@@ -150,7 +150,7 @@ def plot_cases(
             marker_size=12,
             marker_line_width=2,
             name="Events and Interventions",
-            text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)"],
+            text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)", "Masks (Public)"],
             textposition="top center"
         ))
         
@@ -283,7 +283,11 @@ def plot_cases(
 
         fig.add_trace(
             go.Scatter(x=[mpl_dates[70],mpl_dates[70] ], y=[minVertY, maxVertY], mode='lines', 
-            line=dict(dash="dashdot",color='#abbd07'), name='Masks Made Compulsory')
+            line=dict(dash="dashdot",color='#abbd07'), name='Masks (Shopping)')
+        )
+        fig.add_trace(
+            go.Scatter(x=[mpl_dates[91],mpl_dates[91] ], y=[minVertY, maxVertY], mode='lines', 
+            line=dict(dash="dashdot",color='#E7F94E'), name='Masks (Public)')
         )
         fig.add_trace(
             go.Scatter(x=[mpl_dates[0],mpl_dates[-1] ], y=[0, 0], mode='lines', 
@@ -622,7 +626,9 @@ def set_col4_children(selected_rate):
                 html.Li("10 March 2020: Universities and schools close until further notice."),
                 html.Li("18 March 2020: Border restriction including restrictions on inbound passengers."),
                 html.Li("23 April 2020: Beginning of Ramadan."),
-                html.Li("26 April 2020: Masks made compulsory for all shoppers, service sector and construction sector employees.")]
+                html.Li("26 April 2020: Masks made compulsory for all shoppers, service sector and construction sector employees."),
+                html.Li("17 May 2020: Masks made compulsory for all individuals going out in public.")
+                ]
             ),
             html.H5("""
             When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic. 
