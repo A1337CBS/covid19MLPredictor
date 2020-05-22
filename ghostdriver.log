@@ -1,5 +1,13 @@
-[INFO  - 2020-05-22T11:45:24.208Z] GhostDriver - Main - running on port 46401
-[INFO  - 2020-05-22T11:45:25.160Z] Session [b9b2d460-9c21-11ea-86ec-393a64475de8] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
-[INFO  - 2020-05-22T11:45:25.160Z] Session [b9b2d460-9c21-11ea-86ec-393a64475de8] - page.customHeaders:  - {}
-[INFO  - 2020-05-22T11:45:25.160Z] Session [b9b2d460-9c21-11ea-86ec-393a64475de8] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"linux-unknown-64bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
-[INFO  - 2020-05-22T11:45:25.160Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: b9b2d460-9c21-11ea-86ec-393a64475de8
+[INFO  - 2020-05-22T12:43:51.448Z] GhostDriver - Main - running on port 38351
+[INFO  - 2020-05-22T12:43:52.399Z] Session [e42d07d0-9c29-11ea-ac8a-6f8bbdc3fda3] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2020-05-22T12:43:52.399Z] Session [e42d07d0-9c29-11ea-ac8a-6f8bbdc3fda3] - page.customHeaders:  - {}
+[INFO  - 2020-05-22T12:43:52.399Z] Session [e42d07d0-9c29-11ea-ac8a-6f8bbdc3fda3] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"linux-unknown-64bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2020-05-22T12:43:52.399Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: e42d07d0-9c29-11ea-ac8a-6f8bbdc3fda3
+[ERROR - 2020-05-22T12:43:56.311Z] Session [e42d07d0-9c29-11ea-ac8a-6f8bbdc3fda3] - page.onError - msg: TypeError: undefined is not a constructor (evaluating 'e.hasOwnProperty(r)')
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2020-05-22T12:43:56.311Z] Session [e42d07d0-9c29-11ea-ac8a-6f8bbdc3fda3] - page.onError - stack:
+  assign (https://f.vimeocdn.com/p/3.20.6/js/player.js:10)
+  (anonymous function) (https://f.vimeocdn.com/p/3.20.6/js/module/sentry.js:24)
+
+  phantomjs://platform/console++.js:263 in error
