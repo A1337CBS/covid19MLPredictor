@@ -192,7 +192,7 @@ def get_covid_metrics_model():
       
 
 
-get_covid_metrics_parser()
+get_covid_metrics_model()
 
 
   # %%
