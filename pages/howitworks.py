@@ -39,7 +39,7 @@ column1 = dbc.Col(
                 - 16/5/2020 Added a tested compartment in the SIR model. It was found that untested infected people make a difference to the SIR model.
                 - 15/5/2020 Changed data source from [John Hopkins University repo](https://github.com/CSSEGISandData/COVID-19) to 
                 [Qatar Open Data Portal](https://www.data.gov.qa/explore/dataset/covid-19-cases-in-qatar/information/). The pages here will be
-                updated with new data every noon and models will be updated with a small delay.
+                updated with new data every noon and models will be updated after a small delay.
                 ## Contributors
 
                 Shehel Yoosuf  
