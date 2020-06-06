@@ -1,13 +1,5 @@
-[INFO  - 2020-06-05T10:50:39.553Z] GhostDriver - Main - running on port 52061
-[INFO  - 2020-06-05T10:50:40.506Z] Session [65ace780-a71a-11ea-ae47-15f633655f59] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
-[INFO  - 2020-06-05T10:50:40.506Z] Session [65ace780-a71a-11ea-ae47-15f633655f59] - page.customHeaders:  - {}
-[INFO  - 2020-06-05T10:50:40.506Z] Session [65ace780-a71a-11ea-ae47-15f633655f59] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"linux-unknown-64bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
-[INFO  - 2020-06-05T10:50:40.506Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 65ace780-a71a-11ea-ae47-15f633655f59
-[ERROR - 2020-06-05T10:50:45.767Z] Session [65ace780-a71a-11ea-ae47-15f633655f59] - page.onError - msg: TypeError: undefined is not a constructor (evaluating 'e.hasOwnProperty(r)')
-
-  phantomjs://platform/console++.js:263 in error
-[ERROR - 2020-06-05T10:50:45.767Z] Session [65ace780-a71a-11ea-ae47-15f633655f59] - page.onError - stack:
-  assign (https://f.vimeocdn.com/p/3.20.10/js/player.js:10)
-  (anonymous function) (https://f.vimeocdn.com/p/3.20.10/js/module/sentry.js:24)
-
-  phantomjs://platform/console++.js:263 in error
+[INFO  - 2020-06-06T11:29:59.606Z] GhostDriver - Main - running on port 47115
+[INFO  - 2020-06-06T11:30:00.549Z] Session [0ec8a330-a7e9-11ea-9140-1304b9674440] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2020-06-06T11:30:00.549Z] Session [0ec8a330-a7e9-11ea-9140-1304b9674440] - page.customHeaders:  - {}
+[INFO  - 2020-06-06T11:30:00.549Z] Session [0ec8a330-a7e9-11ea-9140-1304b9674440] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"linux-unknown-64bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2020-06-06T11:30:00.549Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 0ec8a330-a7e9-11ea-9140-1304b9674440
