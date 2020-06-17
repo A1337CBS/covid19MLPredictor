@@ -34,6 +34,7 @@ column1 = dbc.Col(
                 is also no guarantee the estimations will materialize.      
 
                 ## Updates
+                - 17/5/2020 Reproductive rate estimates has been consistently showing a downward trend. Added several event markers including reopening measures. 
                 - 21/5/2020 Added realtime estimation for reproductive number. 
                 - 18/5/2020 Added changepoint for the 17th May ruling on masks being made mandatory.
                 - 16/5/2020 Added a tested compartment in the SIR model. It was found that untested infected people make a difference to the SIR model.

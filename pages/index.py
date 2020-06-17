@@ -141,19 +141,45 @@ def plot_cases(
             go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot", color="#f21146"), name='Fit with 95% CI') 
         )
         fig.add_trace(go.Scatter(
-            x=[mpl_dates[7], mpl_dates[15], mpl_dates[51], mpl_dates[54], mpl_dates[75]],
-            y=[2000, 2000, 2000, 2000, 2000],
+            x=[mpl_dates[7], mpl_dates[15], mpl_dates[54], mpl_dates[75]],
+            y=[2350, 2350, 2350, 2350, 2350],
             mode="markers",
             marker_symbol="cross-dot",
             marker_line_color="#6ab9f2",
             marker_color="#6af2e6",
             marker_size=12,
             marker_line_width=2,
-            name="Events and Interventions",
-            text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)", "Masks (Public)"],
+            name="Interventions",
+            text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)", "Masks (Public)", "Eid Measures (10 Days)", ],
             textposition="top center"
         ))
-        
+        fig.add_trace(go.Scatter(
+            x=[mpl_dates[51], mpl_dates[77]],
+            y=[2350, 2350, 2350, 2350, 2350],
+            mode="markers",
+            marker_symbol="cross-dot",
+            marker_line_color="#d9ba8b",
+            marker_color="#f2bc6a",
+            marker_size=12,
+            marker_line_width=2,
+            name="Events",
+            text=["Ramadan", "Eid Al-Fitr"],
+            textposition="top center"
+        ))
+        fig.add_trace(go.Scatter(
+            x=[mpl_dates[102]],
+            y=[2350, 2350, 2350, 2350, 2350],
+            mode="markers",
+            marker_symbol="cross-dot",
+            marker_line_color="#d97165",
+            marker_color="#f55240",
+            marker_size=12,
+            marker_line_width=2,
+            name="Reopening Measures",
+            text=["Phase 1"],
+            textposition="top center"
+        ))
+
     time2 = np.arange(0, num_days_future)
     mpl_dates_fut = conv_time_to_mpl_dates(time2) + diff_data_sim + num_days_data
     cases_future = new_cases_sim[:, num_days_data : num_days_data + num_days_future].T
