@@ -9,7 +9,7 @@ import os
 import time
 import datetime
 
-
+import pdb
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -148,6 +148,7 @@ def get_covid_metrics_model():
     while (repeat):
       # Scrape new stats from moph
       req = ('https://covid19.moph.gov.qa/EN/Pages/default.aspx')
+      pdb.set_trace()
       # webpage = urlopen(req).read()
 
       new_stats = []
