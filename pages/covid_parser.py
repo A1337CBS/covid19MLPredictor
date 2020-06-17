@@ -148,12 +148,17 @@ def get_covid_metrics_model():
     while (repeat):
       # Scrape new stats from moph
       req = ('https://covid19.moph.gov.qa/EN/Pages/default.aspx')
-      pdb.set_trace()
       # webpage = urlopen(req).read()
 
       new_stats = []
 
-      driver = webdriver.PhantomJS()
+      #PhantomJS stopped working, switched to chromedriver
+      chrome_options = webdriver.ChromeOptions()
+      chrome_options.add_argument('--headless')
+
+      driver = webdriver.Chrome('/usr/bin/chromedriver',options=chrome_options)
+
+      #driver = webdriver.PhantomJS()
       driver.get(req)
       new_stats.append(int(driver.find_element_by_id(id_='strgPeopleTested').text))
       new_stats.append(int(driver.find_element_by_id(id_='strgPositiveCases').text))
