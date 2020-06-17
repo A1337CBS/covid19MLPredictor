@@ -141,8 +141,8 @@ def plot_cases(
             go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot", color="#f21146"), name='Fit with 95% CI') 
         )
         fig.add_trace(go.Scatter(
-            x=[mpl_dates[7], mpl_dates[15], mpl_dates[54], mpl_dates[75]],
-            y=[2350, 2350, 2350, 2350, 2350],
+            x=[mpl_dates[7], mpl_dates[15], mpl_dates[54], mpl_dates[75], mpl_dates[77]],
+            y=[1500, 1500, 2350, 2350, 2350],
             mode="markers",
             marker_symbol="cross-dot",
             marker_line_color="#6ab9f2",
@@ -150,11 +150,25 @@ def plot_cases(
             marker_size=12,
             marker_line_width=2,
             name="Interventions",
-            text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)", "Masks (Public)", "Eid Measures (10 Days)", ],
+            text=["School Shutdown", "Border Restrictions", "Masks (Shopping)", "Masks (Public)", "Eid Measures (10 Days)", ],
             textposition="top center"
         ))
+        #         fig.add_trace(go.Scatter(
+        #     x=[mpl_dates[7], mpl_dates[15], mpl_dates[51], mpl_dates[54], mpl_dates[75]],
+        #     y=[2000, 2000, 2000, 2000, 2000],
+        #     mode="markers",
+        #     marker_symbol="cross-dot",
+        #     marker_line_color="#6ab9f2",
+        #     marker_color="#6af2e6",
+        #     marker_size=12,
+        #     marker_line_width=2,
+        #     name="Events and Interventions",
+        #     text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)", "Masks (Public)"],
+        #     textposition="top center"
+        # ))
+ 
         fig.add_trace(go.Scatter(
-            x=[mpl_dates[51], mpl_dates[77]],
+            x=[mpl_dates[51], mpl_dates[82]],
             y=[2350, 2350, 2350, 2350, 2350],
             mode="markers",
             marker_symbol="cross-dot",
@@ -653,12 +667,15 @@ def set_col4_children(selected_rate):
                 html.Li("18 March 2020: Border restriction including restrictions on inbound passengers."),
                 html.Li("23 April 2020: Beginning of Ramadan."),
                 html.Li("26 April 2020: Masks made compulsory for all shoppers, service sector and construction sector employees."),
-                html.Li("17 May 2020: Masks made compulsory for all individuals going out in public.")
+                html.Li("17 May 2020: Masks made compulsory for all individuals going out in public."),
+                html.Li("19 May 2020: Eid precautionary measures including suspending most commercial activities and travel restrictions. In effect till May 31 but this wasn't added as a change point because it's close to another change point.."),
+                html.Li("22 May 2020: Ehtheraz contact tracing app made mandatory for public. Change point wasn't added following the previous reason."),
+                html.Li("15 June 2020: Phase 1 of reopening measures. (Will be added)"),
                 ]
             ),
             html.H5("""
             When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic. 
-            Our preliminary models show Qatar is close to achieving this. #StayHome
+            Effective growth rate has been on a steady decline below 0 but a second wave is a possibility. 
             """)
             ]
     if selected_rate=="Reproduction Rate":
