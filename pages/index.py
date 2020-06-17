@@ -172,7 +172,7 @@ def plot_cases(
             y=[2350, 2350, 2350, 2350, 2350],
             mode="markers",
             marker_symbol="cross-dot",
-            marker_line_color="#d9ba8b",
+            marker_line_color="#f5ac00",
             marker_color="#f2bc6a",
             marker_size=12,
             marker_line_width=2,
@@ -186,7 +186,7 @@ def plot_cases(
             mode="markers",
             marker_symbol="cross-dot",
             marker_line_color="#d97165",
-            marker_color="#f55240",
+            marker_color="#f50400",
             marker_size=12,
             marker_line_width=2,
             name="Reopening Measures",
@@ -372,7 +372,8 @@ def plot_cases(
     #True new_cases_observed Data trace
     if(second_graph == False):
         fig.add_trace(
-        go.Scatter(x=mpl_dates, y=new_cases_obs, mode='markers', name='New Confirmed Cases')
+            go.Scatter(x=mpl_dates, y=new_cases_obs, mode='markers',
+                       name='New Confirmed Cases', line=dict(dash="dot", color='#f26ab9'))
         )
     if(second_graph == False):
         fig.add_trace(
