@@ -142,7 +142,7 @@ def plot_cases(
         )
         fig.add_trace(go.Scatter(
             x=[mpl_dates[7], mpl_dates[15], mpl_dates[54], mpl_dates[75], mpl_dates[77]],
-            y=[1500, 1500, 2350, 2350, 2350],
+            y=[1500, 1500, 2000, 2350, 2350],
             mode="markers",
             marker_symbol="cross-dot",
             marker_line_color="#6ab9f2",
@@ -169,7 +169,7 @@ def plot_cases(
  
         fig.add_trace(go.Scatter(
             x=[mpl_dates[51], mpl_dates[82]],
-            y=[2350, 2350, 2350, 2350, 2350],
+            y=[2000, 2350],
             mode="markers",
             marker_symbol="cross-dot",
             marker_line_color="#f5ac00",
@@ -182,7 +182,7 @@ def plot_cases(
         ))
         fig.add_trace(go.Scatter(
             x=[mpl_dates[102]],
-            y=[2350, 2350, 2350, 2350, 2350],
+            y=[2350],
             mode="markers",
             marker_symbol="cross-dot",
             marker_line_color="#d97165",
