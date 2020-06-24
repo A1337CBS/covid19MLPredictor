@@ -181,7 +181,7 @@ def plot_cases(
             textposition="top center"
         ))
         fig.add_trace(go.Scatter(
-            x=[mpl_dates[102]],
+            x=[mpl_dates[104]],
             y=[2350],
             mode="markers",
             marker_symbol="cross-dot",
