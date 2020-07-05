@@ -330,6 +330,10 @@ def plot_cases(
             line=dict(dash="dashdot",color='#E7F94E'), name='Masks (Public)')
         )
         fig.add_trace(
+            go.Scatter(x=[mpl_dates[104],mpl_dates[104] ], y=[minVertY, maxVertY], mode='lines', 
+            line=dict(dash="dashdot",color='#E7F94E'), name='Phase 1')
+        )
+        fig.add_trace(
             go.Scatter(x=[mpl_dates[0],mpl_dates[-1] ], y=[0, 0], mode='lines', 
             line=dict(dash="dot",color='black'), name='Critical Point')
         )
@@ -671,7 +675,8 @@ def set_col4_children(selected_rate):
                 html.Li("17 May 2020: Masks made compulsory for all individuals going out in public."),
                 html.Li("19 May 2020: Eid precautionary measures including suspending most commercial activities and travel restrictions. In effect till May 31 but this wasn't added as a change point because it's close to another change point.."),
                 html.Li("22 May 2020: Ehtheraz contact tracing app made mandatory for public. Change point wasn't added following the previous reason."),
-                html.Li("15 June 2020: Phase 1 of reopening measures. (Will be added)"),
+                html.Li("15 June 2020: Phase 1 of reopening measures. This change point has been added to the model."),
+                html.Li("1 July 2020: Phase 2 of reopening measures (Will be added to the model)"),
                 ]
             ),
             html.H5("""
