@@ -330,7 +330,7 @@ def plot_cases(
             line=dict(dash="dashdot",color='#E7F94E'), name='Masks (Public)')
         )
         fig.add_trace(
-            go.Scatter(x=[mpl_dates[104],mpl_dates[104] ], y=[minVertY, maxVertY], mode='lines', 
+            go.Scatter(x=[mpl_dates[120],mpl_dates[120] ], y=[minVertY, maxVertY], mode='lines', 
             line=dict(dash="dashdot",color='#E7F94E'), name='Phase 1')
         )
         fig.add_trace(
