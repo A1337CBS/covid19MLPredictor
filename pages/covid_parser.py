@@ -162,7 +162,8 @@ def get_covid_metrics_model():
       driver.get(req)
       new_stats.append(int(driver.find_element_by_id(id_='strgPeopleTested').text))
       new_stats.append(int(driver.find_element_by_id(id_='strgPositiveCases').text))
-      new_stats.append(int(driver.find_element_by_id(id_='strgActiveCases').text))
+      #new_stats.append(int(driver.find_element_by_id(id_='strgActiveCases').text))
+      new_stats.append(0)
       new_stats.append(int(driver.find_element_by_id(id_='strgPositiveCases24Hrs').text))
       new_stats.append(int(driver.find_element_by_id(id_='strgPeopleAcuteCare').text))
       new_stats.append(int(driver.find_element_by_id(id_='strgPeopleinICU').text))
@@ -189,7 +190,7 @@ def get_covid_metrics_model():
         
         # Append new entries
         df.loc[len(df)] = [new_date.strftime("%Y-%m-%d"),new_stats[3],new_stats[1],
-                          new_stats[0]-prev[4], new_stats[0], new_stats[2], 
+                          new_stats[0]-prev[4], new_stats[0], prev[5]+new_stats[3]-(new_stats[6]-prev[7]), 
                           new_stats[6]-prev[7], new_stats[6], new_stats[-1]-prev[-1], 
                           new_stats[-1]]
         print ("Dataframe appended and written to disk.")
