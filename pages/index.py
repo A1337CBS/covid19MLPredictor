@@ -181,8 +181,8 @@ def plot_cases(
             textposition="top center"
         ))
         fig.add_trace(go.Scatter(
-            x=[mpl_dates[104]],
-            y=[2350],
+            x=[mpl_dates[104], mpl_dates[120]],
+            y=[2350, 2350],
             mode="markers",
             marker_symbol="cross-dot",
             marker_line_color="#d97165",
@@ -190,7 +190,7 @@ def plot_cases(
             marker_size=12,
             marker_line_width=2,
             name="Reopening Measures",
-            text=["Phase 1"],
+            text=["Phase 1", "Phase 2"],
             textposition="top center"
         ))
 
@@ -331,7 +331,11 @@ def plot_cases(
         )
         fig.add_trace(
             go.Scatter(x=[mpl_dates[120],mpl_dates[120] ], y=[minVertY, maxVertY], mode='lines', 
-            line=dict(dash="dashdot",color='#E7F94E'), name='Phase 1')
+            line=dict(dash="dashdot",color='#FFBF00'), name='Phase 1')
+        )
+        fig.add_trace(
+            go.Scatter(x=[mpl_dates[136],mpl_dates[136] ], y=[minVertY, maxVertY], mode='lines',
+            line=dict(dash="dashdot",color='#FFBF00'), name='Phase 2')
         )
         fig.add_trace(
             go.Scatter(x=[mpl_dates[0],mpl_dates[-1] ], y=[0, 0], mode='lines', 
@@ -676,7 +680,7 @@ def set_col4_children(selected_rate):
                 html.Li("19 May 2020: Eid precautionary measures including suspending most commercial activities and travel restrictions. In effect till May 31 but this wasn't added as a change point because it's close to another change point.."),
                 html.Li("22 May 2020: Ehtheraz contact tracing app made mandatory for public. Change point wasn't added following the previous reason."),
                 html.Li("15 June 2020: Phase 1 of reopening measures. This change point has been added to the model."),
-                html.Li("1 July 2020: Phase 2 of reopening measures (Will be added to the model)"),
+                html.Li("1 July 2020: Phase 2 of reopening measures."),
                 ]
             ),
             html.H5("""
