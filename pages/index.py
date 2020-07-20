@@ -117,7 +117,7 @@ def plot_cases(
         week_inter_right = week_interval
 
     fig = make_subplots(rows=1, cols=1)
-    
+
 
     time1 = np.arange(-len(new_cases_obs), 0)
     mpl_dates = conv_time_to_mpl_dates(time1) + diff_data_sim + num_days_data
@@ -125,20 +125,20 @@ def plot_cases(
 
     new_cases_past = new_cases_sim[:, :num_days_data]
 
-    
+
     # 95% CI
     if(second_graph == False):
         percentiles = (
             np.percentile(new_cases_past, q=2.5, axis=0),
             np.percentile(new_cases_past, q=97.5, axis=0),
         )
-        
+
         fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[0],  fill='none', line=dict(width=0.8, color='#ffdaba'), fillcolor='#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False))
         fig.add_trace(go.Scatter(x=mpl_dates, y=percentiles[1],  fill='tonextx', line=dict(width=0.8, color='#ffdaba'), fillcolor = '#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False))
         fig.add_trace(
-            go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot", color="#f21146"), name='Fit with 95% CI') 
+            go.Scatter(x=mpl_dates, y=np.median(new_cases_past, axis=0), mode='lines', line=dict(dash="dashdot", color="#f21146"), name='Fit with 95% CI')
         )
         fig.add_trace(go.Scatter(
             x=[mpl_dates[7], mpl_dates[15], mpl_dates[54], mpl_dates[75], mpl_dates[77]],
@@ -166,7 +166,7 @@ def plot_cases(
         #     text=["School Shutdown", "Border Restrictions", "Ramadan", "Masks (Shopping)", "Masks (Public)"],
         #     textposition="top center"
         # ))
- 
+
         fig.add_trace(go.Scatter(
             x=[mpl_dates[51], mpl_dates[82]],
             y=[2000, 2350],
@@ -225,7 +225,7 @@ def plot_cases(
             np.percentile(cases_future, q=87.5, axis=-1),
         )
 
-        
+
         fig.add_trace(
             go.Scatter(x=mpl_dates_fut, y=percentiles[0], fill='none', line=dict(width=0.8, color='#ffdaba'), fillcolor='#ffdaba',
                         mode= 'lines', opacity=0.2, showlegend=False)
@@ -235,7 +235,7 @@ def plot_cases(
                         mode= 'lines', opacity=0.2, showlegend=False)
                         )
         fig.add_trace(
-            go.Scatter(x=mpl_dates_fut, y=median, mode='lines', line=dict(color="#f21146"), name='Forecast with 75% and 95% CI') 
+            go.Scatter(x=mpl_dates_fut, y=median, mode='lines', line=dict(color="#f21146"), name='Forecast with 75% and 95% CI')
         )
 
         #Define X and Y Axes text add and range
@@ -270,7 +270,7 @@ def plot_cases(
                 ),
             )
         )
-        
+
 
     #Plot growth rate Graph
     if(second_graph == True):
@@ -282,7 +282,7 @@ def plot_cases(
         infile = open(filename,'rb')
         trace_mu = pickle.load(infile)
         infile.close()
-        
+
         time = np.arange(-diff_to_0, -diff_to_0 + len_sim)
         lambda_t = trace_lambda_t[:, :]
         μ = trace_mu[:, None]
@@ -305,32 +305,32 @@ def plot_cases(
 
         maxVertY = np.max(np.percentile(lambda_t - μ, q=97.5, axis=0))
         minVertY = np.min(np.percentile(lambda_t - μ, q=2.5, axis=0))
-        # Vertical Lines 
+        # Vertical Lines
         fig.add_trace(
-            go.Scatter(x=[mpl_dates[23],mpl_dates[23] ], y=[minVertY, maxVertY], mode='lines', 
+            go.Scatter(x=[mpl_dates[23],mpl_dates[23] ], y=[minVertY, maxVertY], mode='lines',
             line=dict(dash="dashdot",color='#1b4703'), name='School Shutdown')
         )
 
         fig.add_trace(
-            go.Scatter(x=[mpl_dates[31],mpl_dates[31] ], y=[minVertY, maxVertY], mode='lines', 
+            go.Scatter(x=[mpl_dates[31],mpl_dates[31] ], y=[minVertY, maxVertY], mode='lines',
             line=dict(dash="dashdot",color='#097a14'), name='Border Shutdown/Contact Restriction')
         )
 
         fig.add_trace(
-            go.Scatter(x=[mpl_dates[67],mpl_dates[67] ], y=[minVertY, maxVertY], mode='lines', 
+            go.Scatter(x=[mpl_dates[67],mpl_dates[67] ], y=[minVertY, maxVertY], mode='lines',
             line=dict(dash="dashdot",color='#50bd07'), name='Ramadan')
         )
 
         fig.add_trace(
-            go.Scatter(x=[mpl_dates[70],mpl_dates[70] ], y=[minVertY, maxVertY], mode='lines', 
+            go.Scatter(x=[mpl_dates[70],mpl_dates[70] ], y=[minVertY, maxVertY], mode='lines',
             line=dict(dash="dashdot",color='#abbd07'), name='Masks (Shopping)')
         )
         fig.add_trace(
-            go.Scatter(x=[mpl_dates[91],mpl_dates[91] ], y=[minVertY, maxVertY], mode='lines', 
+            go.Scatter(x=[mpl_dates[91],mpl_dates[91] ], y=[minVertY, maxVertY], mode='lines',
             line=dict(dash="dashdot",color='#E7F94E'), name='Masks (Public)')
         )
         fig.add_trace(
-            go.Scatter(x=[mpl_dates[120],mpl_dates[120] ], y=[minVertY, maxVertY], mode='lines', 
+            go.Scatter(x=[mpl_dates[120],mpl_dates[120] ], y=[minVertY, maxVertY], mode='lines',
             line=dict(dash="dashdot",color='#FFBF00'), name='Phase 1')
         )
         fig.add_trace(
@@ -338,10 +338,10 @@ def plot_cases(
             line=dict(dash="dashdot",color='#FFBF00'), name='Phase 2')
         )
         fig.add_trace(
-            go.Scatter(x=[mpl_dates[0],mpl_dates[-1] ], y=[0, 0], mode='lines', 
+            go.Scatter(x=[mpl_dates[0],mpl_dates[-1] ], y=[0, 0], mode='lines',
             line=dict(dash="dot",color='black'), name='Critical Point')
         )
-        
+
         fig.update_layout(
             template = 'ggplot2',
             xaxis_title="Date",
@@ -394,7 +394,7 @@ def plot_cases(
 
     fig.update_yaxes(automargin=True)
     return fig
-    
+
 
 ######################################
 #############VARIABLES################
@@ -418,12 +418,12 @@ df4Table = df4Table.iloc[-15:]
 
 df4Table.replace(0, np.nan, inplace=True)
 df4Table.columns = ['Date', 'Observed', 'Model']
-diff_data_sim = 16 # should be significantly larger than the expected delay, in 
+diff_data_sim = 16 # should be significantly larger than the expected delay, in
                    # order to always fit the same number of data points.
 # begin date of observations
 bd = date_begin_data
 
-# begin date of simulations which is set to 16 days before 
+# begin date of simulations which is set to 16 days before
 # first observation by default
 sim_bd = bd - datetime.timedelta(days=diff_data_sim)
 
@@ -469,7 +469,7 @@ def fig_reprod(result):
         x=result["date"],
         y=result["ML"].values,
         marker=dict(
-            size=4, 
+            size=4,
             cmax=3,
             cmin=0,
             color=result["ML"].values,
@@ -481,7 +481,7 @@ def fig_reprod(result):
         showlegend=False,
         mode="markers"))
     fig.add_trace(
-            go.Scatter(x=[result["date"].iloc[0],result["date"].iloc[-1]], y=[1, 1], mode='lines', 
+            go.Scatter(x=[result["date"].iloc[0],result["date"].iloc[-1]], y=[1, 1], mode='lines',
             line=dict(dash="dot",color='black'), name='Critical Point', showlegend=False)
         )
     fig.update_layout(
@@ -491,7 +491,7 @@ def fig_reprod(result):
     return fig
 # 2 column layout. 1st column width = 4/12
 # https://dash-bootstrap-components.opensource.faculty.ai/l/components/layout
-column1 = dbc.Jumbotron([ 
+column1 = dbc.Jumbotron([
         dbc.Col(
                 [
                 dbc.Card(
@@ -508,7 +508,7 @@ column1 = dbc.Jumbotron([
                                 'fontWeight': 'bold'
                             },
                         ),
-                        
+
                     ],
                     className="w-85 mb-3",
                     id="cross-filter-options",
@@ -516,21 +516,21 @@ column1 = dbc.Jumbotron([
                     color="light",
                 )
     ],
-    )], 
+    )],
     fluid=True,
     )
 
 
 
 column2 = dbc.Col(
-    [   
+    [
                             dbc.CardDeck(
                             [
                                 dbc.Card(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H5(covid_cases['new_cases'], id="newText", className='mr-2'),  
+                                        html.H5(covid_cases['new_cases'], id="newText", className='mr-2'),
                                         html.P("New cases"),
                                         ])
                                     ],
@@ -541,7 +541,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H5(covid_cases['new_recovered'], id="newText", className='mr-2'),  
+                                        html.H5(covid_cases['new_recovered'], id="newText", className='mr-2'),
                                         html.P("New Recovered"),
                                         ])
                                     ],
@@ -552,7 +552,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H5(covid_cases['new_deaths'], id="newText", className='mr-2'),  
+                                        html.H5(covid_cases['new_deaths'], id="newText", className='mr-2'),
                                         html.P("New Deaths"),
                                         ])
                                     ],
@@ -561,13 +561,13 @@ column2 = dbc.Col(
                                 ),
 
                                 dbc.Card(
-                                    [   
+                                    [
                                         dbc.CardBody(
                                         [
-                                        html.H5(covid_cases['recovered_cases'], id="recoveredText", className='mr-2'),  
+                                        html.H5(covid_cases['recovered_cases'], id="recoveredText", className='mr-2'),
                                         html.P("Total Recovered"),
                                         ])
-                                        
+
                                         ],
                                     id="recovered",
                                     className="mini_container",
@@ -576,7 +576,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H5(covid_cases['active_cases'], id="activeText", className='mr-2'),  
+                                        html.H5(covid_cases['active_cases'], id="activeText", className='mr-2'),
                                         html.P("Active cases"),
                                         ])
                                     ],
@@ -587,7 +587,7 @@ column2 = dbc.Col(
                                     [
                                         dbc.CardBody(
                                         [
-                                        html.H5(covid_cases['death_cases'], id="deathsText", className='mr-2'),  
+                                        html.H5(covid_cases['death_cases'], id="deathsText", className='mr-2'),
                                         html.P("Total Deaths"),
                                         ])
                                     ],
@@ -604,7 +604,7 @@ column2 = dbc.Col(
             #     'displayModeBar': False
             #     }
         ),
-        
+
         dbc.Row([
             html.H5("Last updated on "+str(df["Date"].values[-1]), style={'text-align': 'center'}),
             ], justify='end', className="h-20",style={"padding":"2.5rem",'text-align': 'center'},
@@ -616,7 +616,7 @@ column2 = dbc.Col(
 #available_rates = ['Effective Growth Rate', 'Reproduction Rate']
 column3 = dbc.Col(
     [
-        
+
         html.Hr(),
         html.H3(id='rate_header', children=["Effective Growth Rate - Qatar"]),
         html.Div([
@@ -653,7 +653,7 @@ def set_rate_header(selected_rate):
 
 column4 = dbc.Col(
     [
-            
+
     ],
     id="col4",
     md=6,
@@ -668,7 +668,7 @@ def set_col4_children(selected_rate):
     col4_children = [html.Hr(),
             html.H3(" "),
             html.P("""
-            The model uses a time-dependent transmission/spreading rate following the assumption that a signicant change in transmission rate 
+            The model uses a time-dependent transmission/spreading rate following the assumption that a signicant change in transmission rate
             may occur at certain points over the course of a pandemic. This is modelled though change points which corresponds to Government policy
             interventions and events that could affect the transmission rate. The current model includes the following change points"""),
             html.Ol([
@@ -684,29 +684,29 @@ def set_col4_children(selected_rate):
                 ]
             ),
             html.H5("""
-            When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic. 
-            Effective growth rate has been on a steady decline below 0 but a second wave is a possibility. 
+            When the effective growth rate goes below 0, we will see reduction in new infections and eventually eradicate the pandemic.
+            Effective growth rate has been on a steady decline below 0 but a second wave is a possibility..
             """)
             ]
     if selected_rate=="Reproduction Rate":
         col4_children = [html.Hr(),
             html.H3(" "),
             html.P("""
-            The effective reproductive number provides a one number summary for the state of an epidemic at a given time. 
-            It is defined as the number of people who become infected per infectious person at a given time. The higher the 
-            reproductive number, the more it is spreading. We want this number to be close to 0 and definitely under 1. Beyond 1, 
+            The effective reproductive number provides a one number summary for the state of an epidemic at a given time.
+            It is defined as the number of people who become infected per infectious person at a given time. The higher the
+            reproductive number, the more it is spreading. We want this number to be close to 0 and definitely under 1. Beyond 1,
             the viral transmission is in a growth phase and is infecting more and more people everyday."""),
-            html.P(""" 
-            Knowing the current reproductive number is essential as it is a good indicator of where we stand in terms of 
-            eradicating the pandemic. The graph on the left is derived from a Bayesian approach to estimate and track the reproductive number 
+            html.P("""
+            Knowing the current reproductive number is essential as it is a good indicator of where we stand in terms of
+            eradicating the pandemic. The graph on the left is derived from a Bayesian approach to estimate and track the reproductive number
             on a daily basis. Use the drop-down box to see the result of estimating a similar statistic by keeping the reproductive number
             static given a change point. Whereas the graph to the left is mostly for monitoring the present, the other graph
             derived from the SIR model is for retrospection into the interventions and providing an estimate of the growth of the pandemic
-            in the future.   
+            in the future.
             """)
             ]
     return col4_children
-    
+
 
 layout = dbc.Container([
             html.P("Graphs are interactive and are best viewed in PC or landscape mode."),
